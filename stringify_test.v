@@ -1,9 +1,9 @@
 module json
 
-import jsany { Any }
+import jany { Any }
 
 fn test_stringify_null() {
-	r := stringify(Any(jsany.null), StringifyOpts{})
+	r := stringify(Any(jany.null), StringifyOpts{})
 	assert r == 'null'
 }
 

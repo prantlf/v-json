@@ -1,7 +1,7 @@
 module json
 
 import strings
-import jsany { Any, Null }
+import jany { Any, Null }
 
 pub struct StringifyOpts {
 pub:
