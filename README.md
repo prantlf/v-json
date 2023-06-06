@@ -31,9 +31,10 @@ v install prantlf.json
 v install --git https://github.com/prantlf/v-json
 ```
 
-You will usually need the `Any` type as well:
+You will usually need the `Any` type as well, either from [VPM] or from GitHub:
 
 ```txt
+v install prantlf.jany
 v install --git https://github.com/prantlf/v-jany
 ```
 
