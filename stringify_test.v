@@ -1,6 +1,6 @@
 module json
 
-import jany { Any }
+import prantlf.jany { Any }
 
 fn test_stringify_null() {
 	r := stringify(Any(jany.null), StringifyOpts{})
