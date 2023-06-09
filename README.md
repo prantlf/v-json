@@ -5,7 +5,7 @@ Strictly parse and format JSON data.
 * Condensed and prettified JSON output.
 * Works with the `Any` type suitable for safe handling of JSON/YAML data.
 
-Uses [jany]. See also the [yaml] package.
+Uses [jany]. See also the [yaml] package and the [yaml2json] tool.
 
 ## Synopsis
 
@@ -62,4 +62,4 @@ This is a work in progress.
 [VPM]: https://vpm.vlang.io/packages/prantlf.jany
 [jany]: https://github.com/prantlf/v-jany
 [yaml]: https://github.com/prantlf/v-yaml
-[#18317]: https://github.com/vlang/v/issues/18317
+[yaml2json]: https://github.com/prantlf/v-yaml2json
