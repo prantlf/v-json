@@ -10,8 +10,8 @@ Uses [jany]. See also the [yaml] package and the [yaml2json] tool.
 ## Synopsis
 
 ```go
-import jany { Any, any_int }
-import json { stringify, StringifyOpts }
+import prantlf.jany { Any, any_int }
+import prantlf.json { stringify, StringifyOpts }
 
 // Create JSON data
 any := Any({
@@ -39,6 +39,8 @@ v install --git https://github.com/prantlf/v-jany
 ```
 
 ## API
+
+The following functions are exported:
 
 ### stringify(any Any, opts StringifyOpts) !string
 
