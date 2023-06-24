@@ -8,7 +8,7 @@ pub:
 	pretty bool
 }
 
-pub fn stringify(a Any, opts StringifyOpts) string {
+pub fn stringify(a Any, opts &StringifyOpts) string {
 	mut buffer := strings.new_builder(64)
 	level := if opts.pretty {
 		1
@@ -81,6 +81,7 @@ fn write_string(mut builder strings.Builder, s string) {
 }
 */
 
+[direct_array_access]
 fn write_string(mut builder strings.Builder, s string) {
 	builder.write_u8(`"`)
 	len := s.len
