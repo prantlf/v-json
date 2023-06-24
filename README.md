@@ -160,30 +160,6 @@ json := '{
 config := unmarshal[Config](json, UnmarshalOpts{})
 ```
 
-## Syntax
-
-    value = object | array | primitive;
-
-    primitive = null | boolean | string | number;
-
-    object = "{" [{property [","] } property] "}";
-    property = string ":" value;
-
-    array = "[" [{value [","]} value] "]";
-
-    null = "null";
-
-    boolean = "true" | "false";
-
-    string = "\"" | not-double-quote | "\"";
-
-    stringToken = "a string containing only digits or letters.";
-    stringMultiline = "`" {stringSymbol lineBreak {lineBreak}} stringSymbol {lineBreak} "`";
-    jsonString = "a string as defined by json dot org including surrounding \" ";
-    lineBreak = "the line break character \n";
-
-    number = "a number as defined by json dot org";
-
 ## Errors
 
 For example, the following code:
