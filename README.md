@@ -9,7 +9,7 @@ Strictly parse and format [JSON]/[JSONC] data.
 * Works with the `Any` type suitable for safe handling of [JSON]/[YAML] data.
 * Supports statically typed data as well.
 
-Uses [jany]. See also the [yaml] package and the [yaml2json] tool.
+Uses [prantlf.jany]. See also the [prantlf.yaml] package and the [yaml2json] tool.
 
 ## Synopsis
 
@@ -212,8 +212,8 @@ This is a work in progress.
 * Help fixing a bug in V - generics doesn't support nested structs.
 
 [VPM]: https://vpm.vlang.io/packages/prantlf.jany
-[jany]: https://github.com/prantlf/v-jany
-[yaml]: https://github.com/prantlf/v-yaml
+[prantlf.jany]: https://github.com/prantlf/v-jany
+[prantlf.yaml]: https://github.com/prantlf/v-yaml
 [yaml2json]: https://github.com/prantlf/v-yaml2json
 [JSON]: https://www.json.org/
 [JSONC]: https://changelog.com/news/jsonc-is-a-superset-of-json-which-supports-comments-6LwR
