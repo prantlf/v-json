@@ -109,9 +109,10 @@ any := parse(input, ParseOpts{})
 
 Formats an `Any` value to a string according to the JSON specification. See [jany] for more information about the `Any` type. Fields available in `StringifyOpts`:
 
-| Name     | Type   | Default | Description                                                           |
-|:---------|:-------|:--------|:----------------------------------------------------------------------|
-| `pretty` | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
+| Name              | Type   | Default | Description                                                           |
+|:------------------|:-------|:--------|:----------------------------------------------------------------------|
+| `pretty`          | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
+| `trailing_commas` | `bool` | `false` | inserts commas behind the last item in an array or in an object       |
 
 ```go
 str := stringify(any, StringifyOpts{ pretty: true })

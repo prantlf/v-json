@@ -3,7 +3,7 @@ module json
 import prantlf.jany
 
 pub struct MarshalOpts {
-pub:
+pub mut:
 	enums_as_names bool
 	pretty         bool
 }

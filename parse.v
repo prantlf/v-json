@@ -9,7 +9,7 @@ import prantlf.jany { Any }
 fn C.strtod(charptr, &charptr) f64
 
 pub struct ParseOpts {
-pub:
+pub mut:
 	ignore_comments        bool
 	ignore_trailing_commas bool
 }

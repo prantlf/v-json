@@ -3,7 +3,7 @@ module json
 import prantlf.jany
 
 pub struct UnmarshalOpts {
-pub:
+pub mut:
 	ignore_comments        bool
 	ignore_trailing_commas bool
 	require_all_fields     bool

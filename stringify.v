@@ -4,8 +4,9 @@ import strings
 import prantlf.jany { Any, Null }
 
 pub struct StringifyOpts {
-pub:
-	pretty bool
+pub mut:
+	pretty          bool
+	trailing_commas bool
 }
 
 pub fn stringify(a Any, opts &StringifyOpts) string {
@@ -15,11 +16,11 @@ pub fn stringify(a Any, opts &StringifyOpts) string {
 	} else {
 		0
 	}
-	write_any(mut buffer, a, level)
+	write_any(mut buffer, a, level, opts)
 	return buffer.str()
 }
 
-fn write_any(mut builder strings.Builder, a Any, level int) {
+fn write_any(mut builder strings.Builder, a Any, level int, opts &StringifyOpts) {
 	match a {
 		Null {
 			write_raw(mut builder, json.null_str)
@@ -34,10 +35,10 @@ fn write_any(mut builder strings.Builder, a Any, level int) {
 			write_string(mut builder, a)
 		}
 		[]Any {
-			write_array(mut builder, a, level)
+			write_array(mut builder, a, level, opts)
 		}
 		map[string]Any {
-			write_object(mut builder, a, level)
+			write_object(mut builder, a, level, opts)
 		}
 	}
 }
@@ -111,7 +112,7 @@ fn write_string(mut builder strings.Builder, s string) {
 	builder.write_u8(`"`)
 }
 
-fn write_array(mut builder strings.Builder, array []Any, level int) {
+fn write_array(mut builder strings.Builder, array []Any, level int, opts &StringifyOpts) {
 	builder.write_u8(`[`)
 	newlevel := next_level(level)
 	last := array.len - 1
@@ -119,8 +120,8 @@ fn write_array(mut builder strings.Builder, array []Any, level int) {
 		if level > 0 {
 			write_indent(mut builder, level)
 		}
-		write_any(mut builder, item, newlevel)
-		if i != last {
+		write_any(mut builder, item, newlevel, opts)
+		if i != last || opts.trailing_commas {
 			builder.write_u8(`,`)
 		}
 	}
@@ -130,7 +131,7 @@ fn write_array(mut builder strings.Builder, array []Any, level int) {
 	builder.write_u8(`]`)
 }
 
-fn write_object(mut builder strings.Builder, object map[string]Any, level int) {
+fn write_object(mut builder strings.Builder, object map[string]Any, level int, opts &StringifyOpts) {
 	builder.write_u8(`{`)
 	newlevel := next_level(level)
 	mut next := false
@@ -148,7 +149,10 @@ fn write_object(mut builder strings.Builder, object map[string]Any, level int) {
 		if level > 0 {
 			builder.write_u8(` `)
 		}
-		write_any(mut builder, val, newlevel)
+		write_any(mut builder, val, newlevel, opts)
+	}
+	if next && opts.trailing_commas {
+		builder.write_u8(`,`)
 	}
 	if next && level > 0 {
 		write_indent(mut builder, level - 1)

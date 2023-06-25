@@ -66,3 +66,17 @@ fn test_stringify_object_2() {
 	}), StringifyOpts{})
 	assert r == '{"a":1,"b":2}'
 }
+
+fn test_stringify_trailing_commas() {
+	r := stringify(Any({
+		'a': Any([Any(f64(1)), Any(f64(2))])
+		'b': Any(f64(3))
+	}), StringifyOpts{ trailing_commas: true, pretty: true })
+	assert r == '{
+  "a": [
+    1,
+    2,
+  ],
+  "b": 3,
+}'
+}
