@@ -9,6 +9,7 @@
       "command": "v",
       "args": [
         "-g",
+        "crun",
         "${relativeFile}",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}"

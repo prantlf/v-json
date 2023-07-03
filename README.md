@@ -197,7 +197,7 @@ This module is almost 3.8x faster than `x.json2` when parsing:
 
 and almost 3.5x faster when stringifying:
 
-    ❯ ./stringfy_bench.vsh
+    ❯ ./stringify_bench.vsh
 
     SPENT  1271.921 ms in stringifying condensed with x.json2
     SPENT   380.261 ms in stringifying condensed with prantlf.json

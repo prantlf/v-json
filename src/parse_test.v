@@ -362,7 +362,7 @@ fn test_single_line_comment_begin_no() {
 	assert full == 'Unexpected "/" when parsing a value:
  1 | // ultimate answer
    | ^
- 2 | 4…'
+ 2 | 42'
 }
 
 fn test_single_line_comment_end_no() {
@@ -384,7 +384,9 @@ fn test_single_line_comment_middle_no() {
  2 | [
  3 |   // ultimate
    |   ^
- 4 |   // ans…'
+ 4 |   // answer
+ 5 |   42
+ 6 | ]'
 }
 
 fn test_single_line_comment_begin() {
@@ -428,15 +430,16 @@ fn test_multi_line_comment_begin_no() {
 42', ParseOpts{})
 	assert short == 'Unexpected "/" when parsing a value on line 1, column 1'
 	assert full == 'Unexpected "/" when parsing a value:
- 1 | /* ultimate answer *…
-   | ^'
+ 1 | /* ultimate answer */
+   | ^
+ 2 | 42'
 }
 
 fn test_multi_line_comment_end_no() {
 	short, full := failing_test('42 /* ultimate answer */', ParseOpts{})
 	assert short == 'Unexpected "/" at the end of the parsed content on line 1, column 4'
 	assert full == 'Unexpected "/" at the end of the parsed content:
- 1 | 42 /* ultimate answer *…
+ 1 | 42 /* ultimate answer */
    |    ^'
 }
 
@@ -451,7 +454,8 @@ fn test_multi_line_comment_middle_no() {
  2 | [
  3 |   /* ultimate
    |   ^
- 4 |    * ans…'
+ 4 |    * answer */
+ 5 |   4…'
 }
 
 fn test_multi_line_comment_begin() {
