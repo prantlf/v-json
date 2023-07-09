@@ -369,6 +369,13 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 					continue
 				}
 				else {
+					if c < 32 {
+						idx := escapable.index(c)
+						if idx >= 0 {
+							return p.fail(i, 'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
+						}
+						return p.fail(i, 'Unescaped control character "\\u${int(c).hex()}" encountered when parsing a string')
+					}
 					builder.write_u8(c)
 				}
 			}
@@ -443,7 +450,15 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 				`\\` {
 					return i, true
 				}
-				else {}
+				else {
+					if c < 32 {
+						idx := escapable.index(c)
+						if idx >= 0 {
+							return p.fail(i, 'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
+						}
+						return p.fail(i, 'Unescaped control character "\\u${int(c).hex()}" encountered when parsing a string')
+					}
+				}
 			}
 		}
 		i += rune_len
