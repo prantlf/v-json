@@ -80,3 +80,15 @@ fn test_stringify_trailing_commas() {
   "b": 3,
 }'
 }
+
+fn test_stringify_object_single_quotes() {
+	r := stringify(Any({
+		'a': Any(f64(1))
+	}), StringifyOpts{ single_quotes: true })
+	assert r == "{'a':1}"
+}
+
+fn test_stringify_escaped_single_quotes() {
+	r := stringify(Any("a'b"), StringifyOpts{ single_quotes: true })
+	assert r == "'a\\'b'"
+}

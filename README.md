@@ -1,15 +1,16 @@
 # JSON Parser and Formatter
 
-Strictly parse and format [JSON]/[JSONC] data.
+Strictly parse and format [JSON]/[JSONC]/[JSON5] data.
 
 * Uses a [fast](#performance) recursive descent parser written in V.
 * Shows detailed [error messages](#errors) with location context.
 * Optionally supports [JSONC] - ignores single-line and multi-line JavaScript-style comments treating them as whitespace and also trailing commas in arrays ans objects.
+* Partially supports [JSON5] - allows single-quoted strings. (JSON5 is work in progress.)
 * Offers both condensed and prettified [JSON] output.
 * Works with the `Any` type suitable for safe handling of [JSON]/[YAML] data.
 * Supports statically typed data as well.
 
-Uses [prantlf.jany]. See also the [prantlf.yaml] package and the [yaml2json] tool.
+Uses [prantlf.jany]. See also the [prantlf.yaml] package and [jsonlint] and [yaml2json] tools.
 
 ## Synopsis
 
@@ -81,7 +82,7 @@ v install prantlf.json
 v install --git https://github.com/prantlf/v-json
 ```
 
-You will usually need the `Any` type as well, either from [VPM] or from GitHub:
+The package with the type `Any` will be installed automatically. You can install it explicitly from [VPM] or from GitHub too:
 
 ```txt
 v install prantlf.jany
@@ -209,12 +210,15 @@ and almost 3.5x faster when stringifying:
 This is a work in progress.
 
 * Support `replacer` for `stringify` and `marshal` and `reviver` for `parse` and `unmarshal`.
+* Finish the [JSON5] support.
 * Help fixing a bug in V - generics doesn't support nested structs.
 
 [VPM]: https://vpm.vlang.io/packages/prantlf.jany
 [prantlf.jany]: https://github.com/prantlf/v-jany
 [prantlf.yaml]: https://github.com/prantlf/v-yaml
+[jsonlint]: https://github.com/prantlf/v-jsonlint
 [yaml2json]: https://github.com/prantlf/v-yaml2json
 [JSON]: https://www.json.org/
 [JSONC]: https://changelog.com/news/jsonc-is-a-superset-of-json-which-supports-comments-6LwR
+[JSON5]: https://spec.json5.org/
 [YAML]: https://yaml.org/

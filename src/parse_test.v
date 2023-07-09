@@ -493,3 +493,15 @@ fn test_parse_multi_line_comment_only_no() {
  1 | /**/
    | ^'
 }
+
+fn test_parse_object_single_quote() {
+	r := parse("{'a':1}", ParseOpts{ allow_single_quotes: true })!
+	assert r == Any({
+		'a': Any(f64(1))
+	})
+}
+
+fn test_parse_string_single_quotes_escaped() {
+	r := parse("'a\\'b'", ParseOpts{ allow_single_quotes: true })!
+	assert r == Any("a'b")
+}

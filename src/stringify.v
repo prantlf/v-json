@@ -7,17 +7,30 @@ pub struct StringifyOpts {
 pub mut:
 	pretty          bool
 	trailing_commas bool
+	single_quotes   bool
+mut:
+	quote u8
 }
 
 pub fn stringify(a Any, opts &StringifyOpts) string {
-	mut buffer := strings.new_builder(64)
+	if opts.single_quotes {
+		unsafe {
+			opts.quote = `'`
+		}
+	} else {
+		unsafe {
+			opts.quote = `"`
+		}
+	}
+
+	mut builder := strings.new_builder(64)
 	level := if opts.pretty {
 		1
 	} else {
 		0
 	}
-	write_any(mut buffer, a, level, opts)
-	return buffer.str()
+	write_any(mut builder, a, level, opts)
+	return builder.str()
 }
 
 fn write_any(mut builder strings.Builder, a Any, level int, opts &StringifyOpts) {
@@ -32,7 +45,7 @@ fn write_any(mut builder strings.Builder, a Any, level int, opts &StringifyOpts)
 			write_raw(mut builder, number_to_string(a))
 		}
 		string {
-			write_string(mut builder, a)
+			write_string(mut builder, a, opts)
 		}
 		[]Any {
 			write_array(mut builder, a, level, opts)
@@ -47,13 +60,14 @@ fn write_raw(mut builder strings.Builder, s string) {
 	unsafe { builder.write_ptr(s.str, s.len) }
 }
 
-const escapable = [u8(`\b`), u8(`\f`), u8(`\n`), u8(`\r`), u8(`\t`), u8(`\\`), u8(`"`)]
+const escapable = [u8(`\b`), u8(`\f`), u8(`\n`), u8(`\r`), u8(`\t`)]
 
-const escaped = [u8(`b`), u8(`f`), u8(`n`), u8(`r`), u8(`t`), u8(`\\`), u8(`"`)]
+const escaped = [u8(`b`), u8(`f`), u8(`n`), u8(`r`), u8(`t`)]
 
 /*
-fn write_string(mut builder strings.Builder, s string) {
-	builder.write_u8(`"`)
+fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
+	quote := opts.quote
+	builder.write_u8(quote)
 	len := s.len
 	mut prev := 0
 	mut cur := 0
@@ -78,25 +92,31 @@ fn write_string(mut builder strings.Builder, s string) {
 	if prev < cur {
 		unsafe { builder.write_ptr(s.str + prev, cur - prev) }
 	}
-	builder.write_u8(`"`)
+	builder.write_u8(quote)
 }
 */
 
 [direct_array_access]
-fn write_string(mut builder strings.Builder, s string) {
-	builder.write_u8(`"`)
+fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
+	quote := opts.quote
+	builder.write_u8(quote)
 	len := s.len
 	mut cur := 0
 	for cur < len {
 		ch := s[cur]
 		rune_len := utf8_char_len(ch)
 		if rune_len == 1 {
-			idx := json.escapable.index(ch)
-			if idx >= 0 {
+			if ch == quote || ch == `\\` {
 				builder.write_u8(`\\`)
-				builder.write_u8(json.escaped[idx])
-			} else {
 				builder.write_u8(ch)
+			} else {
+				idx := json.escapable.index(ch)
+				if idx >= 0 {
+					builder.write_u8(`\\`)
+					builder.write_u8(json.escaped[idx])
+				} else {
+					builder.write_u8(ch)
+				}
 			}
 			cur++
 		} else {
@@ -109,7 +129,7 @@ fn write_string(mut builder strings.Builder, s string) {
 			}
 		}
 	}
-	builder.write_u8(`"`)
+	builder.write_u8(quote)
 }
 
 fn write_array(mut builder strings.Builder, array []Any, level int, opts &StringifyOpts) {
@@ -144,7 +164,7 @@ fn write_object(mut builder strings.Builder, object map[string]Any, level int, o
 		if level > 0 {
 			write_indent(mut builder, level)
 		}
-		write_string(mut builder, key)
+		write_string(mut builder, key, opts)
 		builder.write_u8(`:`)
 		if level > 0 {
 			builder.write_u8(` `)

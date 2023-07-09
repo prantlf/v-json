@@ -12,6 +12,7 @@ pub struct ParseOpts {
 pub mut:
 	ignore_comments        bool
 	ignore_trailing_commas bool
+	allow_single_quotes    bool
 }
 
 struct Parser {
@@ -53,7 +54,14 @@ fn (mut p Parser) parse_value(i int) !(Any, int) {
 			return Any(num), next
 		}
 		`"` {
-			str, next := p.parse_string(i)!
+			str, next := p.parse_string(i, `"`)!
+			return Any(str), next
+		}
+		`'` {
+			if !p.opts.allow_single_quotes {
+				return p.fail(i, 'Unexpected "\'" when parsing a value')
+			}
+			str, next := p.parse_string(i, `'`)!
 			return Any(str), next
 		}
 		`[` {
@@ -277,10 +285,15 @@ fn (mut p Parser) parse_object(from int) !(map[string]Any, int) {
 [direct_array_access]
 fn (mut p Parser) parse_key(i int) !(string, int) {
 	c := p.str[i]
-	if c != `"` {
-		return p.fail(i, 'Expected \'"\' but got "${rune(c)}" when parsing an object key')
+	if c != `"` && !(c == `'` && p.opts.allow_single_quotes) {
+		option := if p.opts.allow_single_quotes {
+			' or "\'"'
+		} else {
+			''
+		}
+		return p.fail(i, 'Expected \'"\'${option} but got "${rune(c)}" when parsing an object key')
 	}
-	return p.parse_string(i)!
+	return p.parse_string(i, c)!
 }
 
 [direct_array_access]
@@ -332,9 +345,9 @@ fn (mut p Parser) parse_number(i int) !(f64, int) {
 }
 
 [direct_array_access]
-fn (mut p Parser) parse_string(from int) !(string, int) {
+fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 	first := from + 1
-	mut i, mut c, esc := p.detect_escape(first)!
+	mut i, mut c, esc := p.detect_escape(first, quote)!
 	if !esc {
 		return unsafe { tos(p.str.str + first, i - first) }, i + 1
 	}
@@ -345,7 +358,7 @@ fn (mut p Parser) parse_string(from int) !(string, int) {
 		mut rune_len := utf8_char_len(c)
 		if rune_len == 1 {
 			match c {
-				`"` {
+				quote {
 					return builder.str(), i + 1
 				}
 				`\\` {
@@ -384,14 +397,14 @@ fn (mut p Parser) parse_string(from int) !(string, int) {
 }
 
 [direct_array_access]
-fn (mut p Parser) detect_escape(from int) !(int, u8, bool) {
+fn (mut p Parser) detect_escape(from int, quote u8) !(int, u8, bool) {
 	mut i := from
 	for i < p.str.len {
 		mut c := p.str[i]
 		mut rune_len := utf8_char_len(c)
 		if rune_len == 1 {
 			match c {
-				`"` {
+				quote {
 					return i, 0, false
 				}
 				`\\` {
