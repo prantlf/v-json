@@ -122,7 +122,7 @@ fn (mut p Parser) skip_space(from int, msg string) !int {
 fn (mut p Parser) skip_comment(from int) !int {
 	mut i := from + 1
 	if i == p.str.len {
-		return p.fail(i, 'Expected "/" or "*" but encounted an end when parsing a comment')
+		return p.fail(i, 'Expected "/" or "*" but encountered an end when parsing a comment')
 	}
 	match p.str[i] {
 		`/` {
@@ -154,11 +154,11 @@ fn (mut p Parser) skip_comment(from int) !int {
 							return i
 						}
 					} else {
-						return p.fail(i, 'Expected "/" but encounted an end when parsing a multi-line comment')
+						return p.fail(i, 'Expected "/" but encountered an end when parsing a multi-line comment')
 					}
 				}
 			}
-			return p.fail(i, 'Expected "*/" but encounted an end when parsing a multi-line comment')
+			return p.fail(i, 'Expected "*/" but encountered an end when parsing a multi-line comment')
 		}
 		else {
 			return from
@@ -347,18 +347,17 @@ fn (mut p Parser) parse_number(i int) !(f64, int) {
 [direct_array_access]
 fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 	first := from + 1
-	mut i, mut c, esc := p.detect_escape(first, quote)!
+	mut i, esc := p.detect_escape(first, quote)!
 	if !esc {
 		return unsafe { tos(p.str.str + first, i - first) }, i + 1
 	}
 	mut builder := strings.new_builder(64)
-	stop := i - 2
-	for j := first; j < stop; j++ {
+	for j := first; j < i; j++ {
 		builder.write_u8(p.str[j])
 	}
-	builder.write_u8(c)
+	i = p.parse_escape_sequence(mut builder, i)!
 	for i < p.str.len {
-		c = p.str[i]
+		mut c := p.str[i]
 		mut rune_len := utf8_char_len(c)
 		if rune_len == 1 {
 			match c {
@@ -366,21 +365,8 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 					return builder.str(), i + 1
 				}
 				`\\` {
-					i++
-					if i == p.str.len {
-						return p.fail(i, 'Unfinished escape sequence encountered when parsing a string')
-					}
-					c = p.str[i]
-					idx := escaped.index(c)
-					if idx >= 0 {
-						builder.write_u8(escapable[idx])
-					} else {
-						builder.write_u8(c)
-					}
-				}
-				`\b`, `\f`, `\n`, `\r`, `\t` {
-					idx := escapable.index(c)
-					return p.fail(i, 'Unexpected whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
+					i = p.parse_escape_sequence(mut builder, i)!
+					continue
 				}
 				else {
 					builder.write_u8(c)
@@ -401,7 +387,50 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 }
 
 [direct_array_access]
-fn (mut p Parser) detect_escape(from int, quote u8) !(int, u8, bool) {
+fn (mut p Parser) parse_escape_sequence(mut builder strings.Builder, from int) !int {
+	mut i := from + 1
+	if i == p.str.len {
+		return p.fail(i, 'Unfinished escape sequence encountered when parsing a string')
+	}
+	mut c := p.str[i]
+	idx := escaped.index(c)
+	if idx >= 0 {
+		builder.write_u8(escapable[idx])
+	} else if c == `\\` || c == `/` || c == `"` || (c == `'` && p.opts.allow_single_quotes) {
+		builder.write_u8(c)
+	} else if c == `u` {
+		mut high := u16(0)
+		high, i = p.parse_unicode(i + 1)!
+		if 0xd800 <= high && high <= 0xdfff {
+			if (high & 0xfc00) != 0xd800 {
+				return p.fail(i, 'Expected unicode sequence "\\u...." for a high surrogate but encountered "\\u${high.hex()}" when parsing a string')
+			}
+			if i + 6 > p.str.len {
+				return p.fail(i, 'Expected unicode sequence "\\u...." for a low surrogate but encountered an end when parsing a string')
+			}
+			if p.str[i] != `\\` || p.str[i + 1] != `u` {
+				return p.fail(i, 'Expected unicode sequence "\\u...." for a low surrogate but encountered "${p.str[i..
+					i + 2]}" when parsing a string')
+			}
+			mut low := u16(0)
+			low, i = p.parse_unicode(i + 2)!
+			if (low & 0xfc00) != 0xdc00 {
+				return p.fail(i, 'Expected unicode sequence "\\u...." for a low surrogate but encountered "\\u${high.hex()}" when parsing a string')
+			}
+			utf32 := u32(high << 10) + low - 0x35fdc00
+			builder.write_rune(utf32)
+		} else {
+			builder.write_rune(high)
+		}
+		return i
+	} else {
+		return p.fail(i, 'Invalid escape sequence "\\${c}" encountered when parsing a string')
+	}
+	return i + 1
+}
+
+[direct_array_access]
+fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 	mut i := from
 	for i < p.str.len {
 		mut c := p.str[i]
@@ -409,23 +438,10 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, u8, bool) {
 		if rune_len == 1 {
 			match c {
 				quote {
-					return i, 0, false
+					return i, false
 				}
 				`\\` {
-					i++
-					if i == p.str.len {
-						return p.fail(i, 'Unfinished escape sequence encountered when parsing a string')
-					}
-					c = p.str[i]
-					idx := escaped.index(c)
-					if idx >= 0 {
-						c = escapable[idx]
-					}
-					return i + 1, c, true
-				}
-				`\b`, `\f`, `\n`, `\r`, `\t` {
-					idx := escapable.index(c)
-					return p.fail(i, 'Unexpected whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
+					return i, true
 				}
 				else {}
 			}
@@ -433,4 +449,28 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, u8, bool) {
 		i += rune_len
 	}
 	return p.fail(i, 'Unexpected end encountered when parsing a string')
+}
+
+[direct_array_access]
+fn (mut p Parser) parse_unicode(from int) !(u16, int) {
+	if from + 4 > p.str.len {
+		return p.fail(from, 'Expected unicode sequence "\\u...." but encountered an end when parsing a string')
+	}
+	mut num := u16(0)
+	end := from + 4
+	mut i := from
+	for i < end {
+		c := p.str[i]
+		mut dig := u16(c - `0`)
+		if dig < 0 || dig > 9 {
+			dig = u16((c & ~32) - `A` + 10)
+			if dig < 10 || dig > 15 {
+				return p.fail(i, 'Invalid hexadecimal digit in unicode sequence "\\u${p.str[from..
+					i + 1]}" encountered when parsing a string')
+			}
+		}
+		num = (num << 4) | dig
+		i++
+	}
+	return u16(num), i
 }

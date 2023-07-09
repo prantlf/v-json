@@ -146,8 +146,8 @@ fn test_parse_string_utf8() {
 
 fn test_parse_string_invalid() {
 	short, full := failing_test('"\n"', ParseOpts{})
-	assert short == 'Unexpected whitespace "\\n" encountered when parsing a string on line 1, column 2'
-	assert full == 'Unexpected whitespace "\\n" encountered when parsing a string:
+	assert short == 'Unescaped whitespace "\\n" encountered when parsing a string on line 1, column 2'
+	assert full == 'Unescaped whitespace "\\n" encountered when parsing a string:
  1 | "
    |  ^
  2 | "'
@@ -155,8 +155,8 @@ fn test_parse_string_invalid() {
 
 fn test_parse_string_invalid_2() {
 	short, full := failing_test('"\\/\n"', ParseOpts{})
-	assert short == 'Unexpected whitespace "\\n" encountered when parsing a string on line 1, column 4'
-	assert full == 'Unexpected whitespace "\\n" encountered when parsing a string:
+	assert short == 'Unescaped whitespace "\\n" encountered when parsing a string on line 1, column 4'
+	assert full == 'Unescaped whitespace "\\n" encountered when parsing a string:
  1 | "\\/
    |    ^
  2 | "'
@@ -509,4 +509,19 @@ fn test_parse_object_single_quote() {
 fn test_parse_string_single_quotes_escaped() {
 	r := parse("'a\\'b'", ParseOpts{ allow_single_quotes: true })!
 	assert r == Any("a'b")
+}
+
+fn test_parse_whitespace() {
+	r := parse('"\\b\\f\\n\\r\\t "', ParseOpts{})!
+	assert r == Any('\b\f\n\r\t ')
+}
+
+fn test_parse_control_chars() {
+	r := parse('"\\u0001\\u000e\\u0011\\u001e"', ParseOpts{})!
+	assert r == Any('\u0001\u000e\u0011\u001e')
+}
+
+fn test_parse_unicode() {
+	r := parse('"\\u2211\\ud83d\\ude01"', ParseOpts{})!
+	assert r == Any('∑😁')
 }
