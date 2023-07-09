@@ -115,6 +115,23 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 				if idx >= 0 {
 					builder.write_u8(`\\`)
 					builder.write_u8(json.escaped[idx])
+				} else if ch < ` ` {
+					builder.write_u8(`\\`)
+					builder.write_u8(`u`)
+					builder.write_u8(`0`)
+					builder.write_u8(`0`)
+					if ch < 16 {
+						builder.write_u8(`0`)
+					} else {
+						builder.write_u8(`1`)
+					}
+					num := ch & 0xf
+					dig := if num > 9 {
+						num + `a` - 10
+					} else {
+						num + `0`
+					}
+					builder.write_u8(dig)
 				} else {
 					builder.write_u8(ch)
 				}

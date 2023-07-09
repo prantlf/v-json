@@ -97,3 +97,8 @@ fn test_stringify_escape_slashes() {
 	r := stringify(Any('a/b'), StringifyOpts{ escape_slashes: true })
 	assert r == '"a\\/b"'
 }
+
+fn test_stringify_escape_control_chars() {
+	r := stringify(Any('\u0001\u0011\u001e'), StringifyOpts{ escape_slashes: true })
+	assert r == '"\\u0001\\u0011\\u001e"'
+}
