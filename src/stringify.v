@@ -1,6 +1,7 @@
 module json
 
 import strings
+import encoding.utf8
 import prantlf.jany { Any, Null }
 
 pub struct StringifyOpts {
@@ -9,6 +10,7 @@ pub mut:
 	trailing_commas bool
 	single_quotes   bool
 	escape_slashes  bool
+	escape_unicode  bool
 mut:
 	quote u8
 }
@@ -137,6 +139,20 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 				}
 			}
 			cur++
+		} else if opts.escape_unicode {
+			builder.write_u8(`\\`)
+			builder.write_u8(`u`)
+			utf32 := utf8.get_uchar(s, cur)
+			if utf32 < 0x10000 {
+				unsafe { builder.write_ptr(utf32.hex().str, 4) }
+			} else {
+				high, low := get_surrogates(u32(utf32))
+				unsafe { builder.write_ptr(high.hex().str, 4) }
+				builder.write_u8(`\\`)
+				builder.write_u8(`u`)
+				unsafe { builder.write_ptr(low.hex().str, 4) }
+			}
+			cur += rune_len
 		} else {
 			builder.write_u8(ch)
 			rune_end := cur + rune_len
@@ -230,4 +246,11 @@ fn number_to_string(n f64) string {
 	} else {
 		n.str()
 	}
+}
+
+fn get_surrogates(utf32 u32) (u16, u16) {
+	rest := utf32 - 0x10000
+	high := u16(((rest << 12) >> 22) + 0xD800)
+	low := u16(((rest << 22) >> 22) + 0xDC00)
+	return high, low
 }

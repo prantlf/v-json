@@ -99,6 +99,11 @@ fn test_stringify_escape_slashes() {
 }
 
 fn test_stringify_escape_control_chars() {
-	r := stringify(Any('\u0001\u0011\u001e'), StringifyOpts{ escape_slashes: true })
-	assert r == '"\\u0001\\u0011\\u001e"'
+	r := stringify(Any('\u0001\u000e\u0011\u001e'), StringifyOpts{ escape_slashes: true })
+	assert r == '"\\u0001\\u000e\\u0011\\u001e"'
+}
+
+fn test_stringify_escape_unicode() {
+	r := stringify(Any('∑😁'), StringifyOpts{ escape_unicode: true })
+	assert r == '"\\u2211\\ud83d\\ude01"'
 }
