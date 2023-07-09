@@ -101,6 +101,7 @@ Parses an `Any` value from a string in the JSON format. See [jany] for more info
 |:-------------------------|:-------|:--------|:------------|
 | `ignore_comments`        | `bool` | `false` | ignores single-line and multi-line JavaScript-style comments treating them as whitespace |
 | `ignore_trailing_commas` | `bool` | `false` | ignores commas behind the last item in an array or in an object             |
+| `allow_single_quotes`    | `bool` | `false` | allows single-quoted strings |
 
 ```go
 any := parse(input, ParseOpts{})
@@ -114,6 +115,7 @@ Formats an `Any` value to a string according to the JSON specification. See [jan
 |:------------------|:-------|:--------|:----------------------------------------------------------------------|
 | `pretty`          | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
 | `trailing_commas` | `bool` | `false` | inserts commas behind the last item in an array or in an object       |
+| `single_quotes`   | `bool` | `false` | format single-quoted instead of double-quoted strings                 |
 
 ```go
 str := stringify(any, StringifyOpts{ pretty: true })
@@ -123,10 +125,12 @@ str := stringify(any, StringifyOpts{ pretty: true })
 
 Marshals a value of `T` to a `string` value. Fields available in `MarshalOpts`:
 
-| Name             | Type   | Default | Description                                                           |
-|:-----------------|:-------|:--------|:----------------------------------------------------------------------|
-| `enums_as_names` | `bool` | `false` | stores `string` names of enum values instead of their `int` values    |
-| `pretty`         | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
+| Name              | Type   | Default | Description                                                           |
+|:------------------|:-------|:--------|:----------------------------------------------------------------------|
+| `enums_as_names`  | `bool` | `false` | stores `string` names of enum values instead of their `int` values    |
+| `pretty`          | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
+| `trailing_commas` | `bool` | `false` | inserts commas behind the last item in an array or in an object       |
+| `single_quotes`   | `bool` | `false` | format single-quoted instead of double-quoted strings                 |
 
 ```go
 struct Config {
@@ -145,6 +149,7 @@ Unmarshals an `Any` value to an instance of `T`. Fields available in `UnmarshalO
 |:-------------------------|:-------|:--------|:------------------------------------------------------------------------|
 | `ignore_comments`        | `bool` | `false` | ignores single-line and multi-line JavaScript-style comments treating them as whitespace |
 | `ignore_trailing_commas` | `bool` | `false` | ignores commas behind the last item in an array or in an object             |
+| `allow_single_quotes`    | `bool` | `false` | allows single-quoted strings |
 | `require_all_fields`     | `bool` | `false` | requires a key in the source object for each field in the target struct |
 | `forbid_extra_keys`      | `bool` | `false` | forbids keys in the source object not mapping to a field in the target struct |
 | `cast_null_to_default`   | `bool` | `false` | allows `null`s in the source data to be translated to default values of V types; `null`s can be unmarshaled only to Option types by default |
