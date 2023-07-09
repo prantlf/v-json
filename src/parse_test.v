@@ -129,6 +129,11 @@ fn test_parse_string_escaped() {
 	assert r == Any('\t')
 }
 
+fn test_parse_string_escaped_later() {
+	r := parse('"a\\t"', ParseOpts{})!
+	assert r == Any('a\t')
+}
+
 fn test_parse_string_escaped_unneeded() {
 	r := parse('"\\/"', ParseOpts{})!
 	assert r == Any('/')

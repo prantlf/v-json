@@ -352,6 +352,10 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 		return unsafe { tos(p.str.str + first, i - first) }, i + 1
 	}
 	mut builder := strings.new_builder(64)
+	stop := i - 2
+	for j := first; j < stop; j++ {
+		builder.write_u8(p.str[j])
+	}
 	builder.write_u8(c)
 	for i < p.str.len {
 		c = p.str[i]
