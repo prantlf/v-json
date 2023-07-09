@@ -8,6 +8,7 @@ pub mut:
 	pretty          bool
 	trailing_commas bool
 	single_quotes   bool
+	escape_slashes  bool
 }
 
 pub fn marshal[T](val T, opts &MarshalOpts) !string {
@@ -18,5 +19,6 @@ pub fn marshal[T](val T, opts &MarshalOpts) !string {
 		pretty: opts.pretty
 		trailing_commas: opts.trailing_commas
 		single_quotes: opts.single_quotes
+		escape_slashes: opts.escape_slashes
 	})
 }

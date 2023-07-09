@@ -8,6 +8,7 @@ pub mut:
 	pretty          bool
 	trailing_commas bool
 	single_quotes   bool
+	escape_slashes  bool
 mut:
 	quote u8
 }
@@ -106,7 +107,7 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 		ch := s[cur]
 		rune_len := utf8_char_len(ch)
 		if rune_len == 1 {
-			if ch == quote || ch == `\\` {
+			if ch == quote || ch == `\\` || (ch == `/` && opts.escape_slashes) {
 				builder.write_u8(`\\`)
 				builder.write_u8(ch)
 			} else {

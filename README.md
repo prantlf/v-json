@@ -116,6 +116,7 @@ Formats an `Any` value to a string according to the JSON specification. See [jan
 | `pretty`          | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
 | `trailing_commas` | `bool` | `false` | inserts commas behind the last item in an array or in an object       |
 | `single_quotes`   | `bool` | `false` | format single-quoted instead of double-quoted strings                 |
+| `escape_slashes`  | `bool` | `false` | escape slashes by prefixing them with a backslash (reverse solidus)   |
 
 ```go
 str := stringify(any, StringifyOpts{ pretty: true })
@@ -131,6 +132,7 @@ Marshals a value of `T` to a `string` value. Fields available in `MarshalOpts`:
 | `pretty`          | `bool` | `false` | enables readable formatting using line breaks, spaces and indentation |
 | `trailing_commas` | `bool` | `false` | inserts commas behind the last item in an array or in an object       |
 | `single_quotes`   | `bool` | `false` | format single-quoted instead of double-quoted strings                 |
+| `escape_slashes`  | `bool` | `false` | escape slashes by prefixing them with a backslash (reverse solidus)   |
 
 ```go
 struct Config {

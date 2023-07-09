@@ -92,3 +92,8 @@ fn test_stringify_escaped_single_quotes() {
 	r := stringify(Any("a'b"), StringifyOpts{ single_quotes: true })
 	assert r == "'a\\'b'"
 }
+
+fn test_stringify_escape_slashes() {
+	r := stringify(Any('a/b'), StringifyOpts{ escape_slashes: true })
+	assert r == '"a\\/b"'
+}
