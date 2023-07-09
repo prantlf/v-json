@@ -1,5 +1,18 @@
 # Changes
 
+## [0.0.9](https://github.com/prantlf/v-json/compare/v0.0.8...v0.0.9) (2023-07-09)
+
+### Bug Fixes
+
+* Escape control characters in the stringified output ([9c9aac6](https://github.com/prantlf/v-json/commit/9c9aac67c050b7c91ab4046f0f26332aedf57b15))
+* Fail parsing if an invalid escape seqauence is detected ([f86d4b5](https://github.com/prantlf/v-json/commit/f86d4b5baee59c9a7aba82f36c4d11b49071d59f))
+* Parse and stringify unicode escape sequences ([4ac6be5](https://github.com/prantlf/v-json/commit/4ac6be5139bd747d648512be709d1ad505ae0719))
+
+### Features
+
+* Allow escaping multibyte characters in the JSON output ([25d4511](https://github.com/prantlf/v-json/commit/25d451177067ff7e30ac7c9cf9c0d114f5c71925))
+* Allow escaping slashes in the stringified output ([115f81c](https://github.com/prantlf/v-json/commit/115f81c979ba80855938dccb53121946c7f11122))
+
 ## [0.0.8](https://github.com/prantlf/v-json/compare/v0.0.7...v0.0.8) (2023-07-09)
 
 ### Features
