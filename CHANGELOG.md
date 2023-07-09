@@ -1,5 +1,14 @@
 # Changes
 
+## [0.0.7](https://github.com/prantlf/v-json/compare/v0.0.6...v0.0.7) (2023-07-09)
+
+### Bug Fixes
+* Parse an escaped character in the middle of a string properly ([563332f](https://github.com/prantlf/v-json/commit/563332f41ffd4047e2837d93d20851ea4af8873d))
+
+### Features
+
+* Allow single quotes (starting JSON5) ([82b7b92](https://github.com/prantlf/v-json/commit/82b7b9274a00da3ca239474f8ee7d480d6a91fb8))
+
 ## [0.0.6](https://github.com/prantlf/v-json/compare/v0.0.5...v0.0.6) (2023-06-25)
 
 ### Features
@@ -10,7 +19,7 @@
 
 ### Features
 
-* Add JSONi/JSONC parsing, marshalling and unmarshalling ([97382f3](https://github.com/prantlf/v-json/commit/97382f3f4574c38d0bfef01a7a396eae4279bd7e))
+* Add JSON/JSONC parsing, marshalling and unmarshalling ([97382f3](https://github.com/prantlf/v-json/commit/97382f3f4574c38d0bfef01a7a396eae4279bd7e))
 
 ### BREAKING CHANGES
 
