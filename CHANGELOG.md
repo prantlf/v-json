@@ -1,5 +1,11 @@
 # Changes
 
+## [0.0.8](https://github.com/prantlf/v-json/compare/v0.0.7...v0.0.8) (2023-07-09)
+
+### Features
+
+* Propagate options from parse and stringify to unmarshal and marshal ([344012e](https://github.com/prantlf/v-json/commit/344012eb6a5de968535c260e46682a0186e3ab96))
+
 ## [0.0.7](https://github.com/prantlf/v-json/compare/v0.0.6...v0.0.7) (2023-07-09)
 
 ### Bug Fixes
