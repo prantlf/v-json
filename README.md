@@ -222,7 +222,7 @@ This is a work in progress.
 * Finish the [JSON5] support.
 * Help fixing a bug in V - generics doesn't support nested structs.
 
-[VPM]: https://vpm.vlang.io/packages/prantlf.jany
+[VPM]: https://vpm.vlang.io/packages/prantlf.json
 [prantlf.jany]: https://github.com/prantlf/v-jany
 [prantlf.yaml]: https://github.com/prantlf/v-yaml
 [jsonlint]: https://github.com/prantlf/v-jsonlint
