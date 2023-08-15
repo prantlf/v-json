@@ -93,7 +93,7 @@ v install --git https://github.com/prantlf/v-jany
 
 The following functions are exported:
 
-### parse(input string, opts ParseOpts) !Any
+### parse(input string, opts &ParseOpts) !Any
 
 Parses an `Any` value from a string in the JSON format. See [jany] for more information about the `Any` type. Fields available in `ParseOpts`:
 
@@ -104,10 +104,10 @@ Parses an `Any` value from a string in the JSON format. See [jany] for more info
 | `allow_single_quotes`    | `bool` | `false` | allows single-quoted strings |
 
 ```go
-any := parse(input, ParseOpts{})
+any := parse(input, ParseOpts{})!
 ```
 
-### stringify(any Any, opts StringifyOpts) !string
+### stringify(any Any, opts &StringifyOpts) !string
 
 Formats an `Any` value to a string according to the JSON specification. See [jany] for more information about the `Any` type. Fields available in `StringifyOpts`:
 
@@ -120,10 +120,10 @@ Formats an `Any` value to a string according to the JSON specification. See [jan
 | `escape_unicode`  | `bool` | `false` | escape multibyte Unicode characters with `\u` literals                |
 
 ```go
-str := stringify(any, StringifyOpts{ pretty: true })
+str := stringify(any, StringifyOpts{ pretty: true })!
 ```
 
-### marshal[T](value T, opts MarshalOpts) !string
+### marshal[T](value T, opts &MarshalOpts) !string
 
 Marshals a value of `T` to a `string` value. Fields available in `MarshalOpts`:
 
@@ -142,12 +142,12 @@ struct Config {
 }
 
 config := Config{ answer: 42 }
-str := marshal(config, MarshalOpts{})
+str := marshal(config, MarshalOpts{})!
 ```
 
-### unmarshal_text[T](input string, opts UnmarshalOpts) !T
+### unmarshal[T](input string, opts &UnmarshalOpts) !T
 
-Unmarshals an `Any` value to an instance of `T`. Fields available in `UnmarshalOpts`:
+Unmarshals an `Any` value to a new instance of `T`. Fields available in `UnmarshalOpts`:
 
 | Name                     | Type   | Default | Description                                                             |
 |:-------------------------|:-------|:--------|:------------------------------------------------------------------------|
@@ -168,7 +168,34 @@ json := '{
   "answer": 42
 }'
 
-config := unmarshal[Config](json, UnmarshalOpts{})
+config := unmarshal[Config](json, UnmarshalOpts{})!
+```
+
+### unmarshal_to[T](input string, mut obj T, opts &UnmarshalOpts) !
+
+Unmarshals an `Any` value to an existing instance of `T`. Fields available in `UnmarshalOpts`:
+
+| Name                     | Type   | Default | Description                                                             |
+|:-------------------------|:-------|:--------|:------------------------------------------------------------------------|
+| `ignore_comments`        | `bool` | `false` | ignores single-line and multi-line JavaScript-style comments treating them as whitespace |
+| `ignore_trailing_commas` | `bool` | `false` | ignores commas behind the last item in an array or in an object             |
+| `allow_single_quotes`    | `bool` | `false` | allows single-quoted strings |
+| `require_all_fields`     | `bool` | `false` | requires a key in the source object for each field in the target struct |
+| `forbid_extra_keys`      | `bool` | `false` | forbids keys in the source object not mapping to a field in the target struct |
+| `cast_null_to_default`   | `bool` | `false` | allows `null`s in the source data to be translated to default values of V types; `null`s can be unmarshaled only to Option types by default |
+| `ignore_number_overflow` | `bool` | `false` | allows losing precision when unmarshaling numbers to smaller numeric types |
+
+```go
+struct Config {
+	answer int
+}
+
+json := '{
+  "answer": 42
+}'
+
+mut config := Config{}
+config := unmarshal_to(json, mut config, UnmarshalOpts{})!
 ```
 
 ## Errors

@@ -4,6 +4,7 @@ import os
 import strings
 import term
 
+[noinit]
 pub struct JsonError {
 	Error
 	head_context string

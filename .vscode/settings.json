@@ -2,13 +2,7 @@
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
-    "**/marshal_test": true,
-    "**/marshal_test.dSYM": true,
-    "**/parse_test": true,
-    "**/parse_test.dSYM": true,
-    "**/stringify_test": true,
-    "**/stringify_test.dSYM": true,
-    "**/unmarshal_test": true,
-    "**/unmarshal_test.dSYM": true
+    "**/*_test": true,
+    "**/*.dSYM": true
   }
 }
