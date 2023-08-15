@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.0](https://github.com/prantlf/v-json/compare/v0.0.9...v0.1.0) (2023-08-15)
+
+### Features
+
+* Add unmarshal_to to modify an existing object ([2cf9949](https://github.com/prantlf/v-json/commit/2cf9949f9d55ff9b192d94282a09cbef518a281f))
+
 ## [0.0.9](https://github.com/prantlf/v-json/compare/v0.0.8...v0.0.9) (2023-07-09)
 
 ### Bug Fixes
