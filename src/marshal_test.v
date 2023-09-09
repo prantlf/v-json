@@ -66,75 +66,62 @@ fn test_marshal_string() {
 // 	assert r == '[1]'
 // }
 
-// enum Human {
-// 	man
-// 	woman
-// }
+enum Human {
+	man
+	woman
+}
 
-// fn test_marshal_enum_num() {
-// 	r := marshal(Human.woman, MarshalOpts{})!
-// 	assert r == Any(f64(1))
-// }
+fn test_marshal_enum_num() {
+	r := marshal(Human.woman, MarshalOpts{})!
+	assert r == '1'
+}
 
-// fn test_marshal_enum_nam() {
-// 	r := marshal(Human.woman, MarshalOpts{ enums_as_names: true })!
-// 	assert r == Any('woman')
-// }
+fn test_marshal_enum_nam() {
+	r := marshal(Human.woman, MarshalOpts{ enums_as_names: true })!
+	assert r == '"woman"'
+}
 
-// struct Empty {}
+struct Empty {}
 
-// fn test_marshal_empty_object() {
-// 	r := marshal(Empty{}, MarshalOpts{})!
-// 	assert r == Any(map[string]Any{})
-// }
+fn test_marshal_empty_object() {
+	r := marshal(Empty{}, MarshalOpts{})!
+	assert r == '{}'
+}
 
-// struct PrimitiveTypes {
-// 	h      Human
-// 	u8     u8
-// 	u16    u16
-// 	u32    u32
-// 	u64    u64
-// 	i8     i8
-// 	i16    i16
-// 	int    int
-// 	i64    i64
-// 	f32    f32
-// 	f64    f64
-// 	string string
-// 	bool   bool
-// }
+struct PrimitiveTypes {
+	h      Human
+	u8     u8
+	u16    u16
+	u32    u32
+	u64    u64
+	i8     i8
+	i16    i16
+	int    int
+	i64    i64
+	f32    f32
+	f64    f64
+	string string
+	bool   bool
+}
 
-// fn test_marshal_primitive_types() {
-// 	r := marshal(PrimitiveTypes{
-// 		h: .woman
-// 		u8: 1
-// 		u16: 2
-// 		u32: 3
-// 		u64: 4
-// 		i8: 5
-// 		i16: 6
-// 		int: 7
-// 		i64: 8
-// 		f32: 9.1
-// 		f64: 9.2
-// 		string: 's'
-// 		bool: true
-// 	}, MarshalOpts{})!
-// 	m := r.object()!
-// 	assert m['h']! == Any(f64(Human.woman))
-// 	assert m['u8']! == Any(f64(1))
-// 	assert m['u16']! == Any(f64(2))
-// 	assert m['u32']! == Any(f64(3))
-// 	assert m['u64']! == Any(f64(4))
-// 	assert m['i8']! == Any(f64(5))
-// 	assert m['i16']! == Any(f64(6))
-// 	assert m['int']! == Any(f64(7))
-// 	assert m['i64']! == Any(f64(8))
-// 	assert m['f32']!.number()! == f32(9.1)
-// 	assert m['f64']! == Any(9.2)
-// 	assert m['string']! == Any('s')
-// 	assert m['bool']! == Any(true)
-// }
+fn test_marshal_primitive_types() {
+	r := marshal(PrimitiveTypes{
+		h: .woman
+		u8: 1
+		u16: 2
+		u32: 3
+		u64: 4
+		i8: 5
+		i16: 6
+		int: 7
+		i64: 8
+		f32: 9.1
+		f64: 9.2
+		string: 's'
+		bool: true
+	}, MarshalOpts{})!
+	assert r == '{"h":1,"u8":1,"u16":2,"u32":3,"u64":4,"i8":5,"i16":6,"int":7,"i64":8,"f32":9.100000381469727,"f64":9.2,"string":"s","bool":true}'
+}
 
 // struct OptionalTypes {
 // 	h      ?Human
@@ -253,53 +240,41 @@ fn test_marshal_optional_type() {
 // }
 // */
 
-// /*
-// struct InnerStruct {
-// 	val int
-// }
+struct InnerStruct {
+	val int
+}
 
-// struct OuterStruct {
-// 	inner InnerStruct
-// }
+struct OuterStruct {
+	inner InnerStruct
+}
 
-// fn test_marshal_struct_in_struct() {
-// 	input := r'
-// inner:
-//   val: 1
-// '
-// 	r := marshal[OuterStruct](input)!
-// 	assert r.inner.val == 1
-// }
-// */
+fn test_marshal_struct_in_struct() {
+	input := OuterStruct{
+		inner: InnerStruct{
+			val: 1
+		}
+	}
+	r := marshal(input, MarshalOpts{})!
+	assert r == '{"inner":{"val":1}}'
+}
 
-// struct Attributes {
-// 	int    int    [required]
-// 	bool   bool   [skip]
-// 	string string
-// 	f64    f64    [json: float; required]
-// 	u8     u8     [nooverflow]
-// 	u16    u16    [nullable]
-// }
+struct Attributes {
+	int    int    [required]
+	bool   bool   [skip]
+	string string
+	f64    f64    [json: float; required]
+	u8     u8     [nooverflow]
+	u16    u16    [nullable]
+}
 
-// fn test_attributes() {
-// 	input := Any({
-// 		'int': Any(f64(1))
-// 		'float': Any(2.3)
-// 		'bool': Any(true)
-// 		'u8': Any(f64(1234))
-// 		'u16': Any(null)
-// 	})
-// 	opts := marshalOpts{
-// 		require_all_fields: false
-// 		forbid_extra_keys: false
-// 		cast_null_to_default: false
-// 		ignore_number_overflow: false
-// 	}
-// 	r := marshal[Attributes](input, opts)!
-// 	assert r.int == 1
-// 	assert r.bool == false
-// 	assert r.string == ''
-// 	assert r.f64 == 2.3
-// 	assert r.u8 == u8(1234)
-// 	assert r.u16 == 0
-// }
+fn test_attributes() {
+	input := Attributes{
+		int: 1
+		f64: 2.3
+		bool: true
+		u8: 4
+		u16: 0
+	}
+	r := marshal(input, MarshalOpts{})!
+	assert r == '{"int":1,"string":"","float":2.3,"u8":4,"u16":0}'
+}
