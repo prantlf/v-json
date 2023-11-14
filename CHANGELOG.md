@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.2](https://github.com/prantlf/v-json/compare/v0.1.1...v0.1.2) (2023-11-14)
+
+### Bug Fixes
+
+* Reduce memory allocations when writing escape sequences ([148fd9c](https://github.com/prantlf/v-json/commit/148fd9ca46c40e3892fec6555dc3d05e88825032))
+
 ## [0.1.1](https://github.com/prantlf/v-json/compare/v0.1.0...v0.1.1) (2023-11-14)
 
 ### Bug Fixes
