@@ -145,14 +145,18 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 			builder.write_u8(`\\`)
 			builder.write_u8(`u`)
 			utf32 := u32(utf8.get_uchar(s, cur))
+			mut buf := []u8{len: 4}
 			if utf32 < 0x10000 {
-				unsafe { builder.write_ptr(u16(utf32).hex_full().str, 4) }
+				u16_to_hex(u16(utf32), mut buf)
+				unsafe { builder.write_ptr(buf.data, 4) }
 			} else {
 				high, low := get_surrogates(u32(utf32))
-				unsafe { builder.write_ptr(high.hex_full().str, 4) }
+				u16_to_hex(high, mut buf)
+				unsafe { builder.write_ptr(buf.data, 4) }
 				builder.write_u8(`\\`)
 				builder.write_u8(`u`)
-				unsafe { builder.write_ptr(low.hex_full().str, 4) }
+				u16_to_hex(low, mut buf)
+				unsafe { builder.write_ptr(buf.data, 4) }
 			}
 			cur += rune_len
 		} else {
@@ -255,4 +259,14 @@ fn get_surrogates(utf32 u32) (u16, u16) {
 	high := u16(((rest << 12) >> 22) + 0xD800)
 	low := u16(((rest << 22) >> 22) + 0xDC00)
 	return high, low
+}
+
+[direct_array_access]
+fn u16_to_hex(nn u16, mut buf []u8) {
+	mut n := nn
+	for i := 3; i >= 0; i-- {
+		d := u8(n & 0xF)
+		buf[i] = if d < 10 { d + `0` } else { d + 87 }
+		n >>= 4
+	}
 }
