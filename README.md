@@ -149,15 +149,15 @@ str := marshal(config, MarshalOpts{})!
 
 Unmarshals an `Any` value to a new instance of `T`. Fields available in `UnmarshalOpts`:
 
-| Name                     | Type   | Default | Description                                                             |
-|:-------------------------|:-------|:--------|:------------------------------------------------------------------------|
+| Name                     | Type   | Default | Description                                                                              |
+|:-------------------------|:-------|:--------|:-----------------------------------------------------------------------------------------|
 | `ignore_comments`        | `bool` | `false` | ignores single-line and multi-line JavaScript-style comments treating them as whitespace |
-| `ignore_trailing_commas` | `bool` | `false` | ignores commas behind the last item in an array or in an object             |
-| `allow_single_quotes`    | `bool` | `false` | allows single-quoted strings |
-| `require_all_fields`     | `bool` | `false` | requires a key in the source object for each field in the target struct |
-| `forbid_extra_keys`      | `bool` | `false` | forbids keys in the source object not mapping to a field in the target struct |
+| `ignore_trailing_commas` | `bool` | `false` | ignores commas behind the last item in an array or in an object                          |
+| `allow_single_quotes`    | `bool` | `false` | allows single-quoted strings                                                             |
+| `require_all_fields`     | `bool` | `false` | requires a key in the source object for each field in the target struct                  |
+| `forbid_extra_keys`      | `bool` | `false` | forbids keys in the source object not mapping to a field in the target struct            |
 | `cast_null_to_default`   | `bool` | `false` | allows `null`s in the source data to be translated to default values of V types; `null`s can be unmarshaled only to Option types by default |
-| `ignore_number_overflow` | `bool` | `false` | allows losing precision when unmarshaling numbers to smaller numeric types |
+| `ignore_number_overflow` | `bool` | `false` | allows losing precision when unmarshaling numbers to smaller numeric types               |
 
 ```go
 struct Config {
