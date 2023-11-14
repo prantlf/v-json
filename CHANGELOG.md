@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.1](https://github.com/prantlf/v-json/compare/v0.1.0...v0.1.1) (2023-11-14)
+
+### Bug Fixes
+
+* Pad hex numbers in escaped Unicode to 4 digits ([4e174bf](https://github.com/prantlf/v-json/commit/4e174bfd485e4e4f68f4901f3a5534cc3996d629))
+
 ## [0.1.0](https://github.com/prantlf/v-json/compare/v0.0.9...v0.1.0) (2023-08-15)
 
 ### Features
