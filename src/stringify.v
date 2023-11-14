@@ -101,6 +101,8 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 
 [direct_array_access]
 fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
+	escape_unicode := opts.escape_unicode
+	escape_slashes := opts.escape_slashes
 	quote := opts.quote
 	builder.write_u8(quote)
 	len := s.len
@@ -109,7 +111,7 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 		ch := s[cur]
 		rune_len := utf8_char_len(ch)
 		if rune_len == 1 {
-			if ch == quote || ch == `\\` || (ch == `/` && opts.escape_slashes) {
+			if ch == quote || ch == `\\` || (ch == `/` && escape_slashes) {
 				builder.write_u8(`\\`)
 				builder.write_u8(ch)
 			} else {
@@ -139,18 +141,18 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 				}
 			}
 			cur++
-		} else if opts.escape_unicode {
+		} else if escape_unicode {
 			builder.write_u8(`\\`)
 			builder.write_u8(`u`)
-			utf32 := utf8.get_uchar(s, cur)
+			utf32 := u32(utf8.get_uchar(s, cur))
 			if utf32 < 0x10000 {
-				unsafe { builder.write_ptr(utf32.hex().str, 4) }
+				unsafe { builder.write_ptr(u16(utf32).hex_full().str, 4) }
 			} else {
 				high, low := get_surrogates(u32(utf32))
-				unsafe { builder.write_ptr(high.hex().str, 4) }
+				unsafe { builder.write_ptr(high.hex_full().str, 4) }
 				builder.write_u8(`\\`)
 				builder.write_u8(`u`)
-				unsafe { builder.write_ptr(low.hex().str, 4) }
+				unsafe { builder.write_ptr(low.hex_full().str, 4) }
 			}
 			cur += rune_len
 		} else {

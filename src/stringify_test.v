@@ -109,6 +109,6 @@ fn test_stringify_escape_control_chars() {
 }
 
 fn test_stringify_escape_unicode() {
-	r := stringify(Any('∑😁'), StringifyOpts{ escape_unicode: true })
-	assert r == '"\\u2211\\ud83d\\ude01"'
+	r := stringify(Any('ö∑😁'), StringifyOpts{ escape_unicode: true })
+	assert r == '"\\u00f6\\u2211\\ud83d\\ude01"'
 }

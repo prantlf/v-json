@@ -1,0 +1,75 @@
+module json
+
+import strings
+import prantlf.jany { Any }
+
+pub struct CommentedAny {
+pub:
+	any Any
+	comment string
+}
+
+pub fn parse_with_comments(str string, opts &ParseOpts) !Any {
+	mut p := Parser{
+		opts: unsafe { opts }
+		str: str
+		last_comment: &strings.new_builder(96)
+	}
+
+	return p.parse()!
+}
+
+[direct_array_access]
+fn (mut p Parser) skip_comment_2(from int) !int {
+	mut i := from + 1
+	if i == p.str.len {
+		return p.fail(i, 'Expected "/" or "*" but encountered an end when parsing a comment')
+	}
+	match p.str[i] {
+		`/` {
+			i++
+			comment_start := i
+			for i < p.str.len {
+				c := p.str[i]
+				i++
+				if c == `\n` {
+					p.comment_start = comment_start
+					p.comment_end = i - 2
+					p.line++
+					p.line_start = i
+					break
+				}
+			}
+			return i
+		}
+		`*` {
+			i++
+			comment_start := i
+			for i < p.str.len {
+				mut c := p.str[i]
+				i++
+				if c == `\n` {
+					p.line++
+					p.line_start = i
+				} else if c == `*` {
+					if i < p.str.len {
+						c = p.str[i]
+						i++
+						if c == `/` {
+							p.comment_start = comment_start
+							p.comment_end = i - 2
+							return i
+						}
+					} else {
+						return p.fail(i, 'Expected "/" but encountered an end when parsing a multi-line comment')
+					}
+				}
+			}
+			return p.fail(i, 'Expected "*/" but encountered an end when parsing a multi-line comment')
+		}
+		else {
+			return from
+		}
+	}
+	return i
+}
