@@ -56,7 +56,6 @@ jobs:
     - name: Publish release
       uses: prantlf/publish-release-action@v1
       with:
-        no-bump: true
         no-archives: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
