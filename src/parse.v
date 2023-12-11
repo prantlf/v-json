@@ -36,7 +36,7 @@ pub fn parse(str string, opts &ParseOpts) !Any {
 	return any
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_value(i int) !(Any, int) {
 	c := p.str[i]
 	match c {
@@ -83,7 +83,7 @@ fn (mut p Parser) find_start() !int {
 	return p.skip_space(from, 'Unexpected end when starting to parse')!
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) skip_space(from int, msg string) !int {
 	mut i := from
 	for i < p.str.len {
@@ -118,7 +118,7 @@ fn (mut p Parser) skip_space(from int, msg string) !int {
 	return i
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) skip_comment(from int) !int {
 	mut i := from + 1
 	if i == p.str.len {
@@ -167,7 +167,7 @@ fn (mut p Parser) skip_comment(from int) !int {
 	return i
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) after_bom() int {
 	if p.str.len >= 3 {
 		unsafe {
@@ -180,7 +180,7 @@ fn (mut p Parser) after_bom() int {
 	return 0
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) check_end(from int) ! {
 	mut i := from
 	for i < p.str.len {
@@ -208,7 +208,7 @@ fn (mut p Parser) check_end(from int) ! {
 	}
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_array(from int) !([]Any, int) {
 	mut arr := []Any{}
 	mut i := from + 1
@@ -241,7 +241,7 @@ fn (mut p Parser) parse_array(from int) !([]Any, int) {
 	return p.fail(i, 'Unexpected end encountered when parsing an array')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_object(from int) !(map[string]Any, int) {
 	mut obj := map[string]Any{}
 	mut i := from + 1
@@ -282,7 +282,7 @@ fn (mut p Parser) parse_object(from int) !(map[string]Any, int) {
 	return p.fail(i, 'Unexpected end encountered when parsing an object')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_key(i int) !(string, int) {
 	c := p.str[i]
 	if c != `"` && !(c == `'` && p.opts.allow_single_quotes) {
@@ -296,7 +296,7 @@ fn (mut p Parser) parse_key(i int) !(string, int) {
 	return p.parse_string(i, c)!
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) skip_null(i int) !int {
 	if i + 3 >= p.str.len {
 		return p.fail(p.str.len, 'Expected "null" but encountered an end when parsing the primitive')
@@ -307,7 +307,7 @@ fn (mut p Parser) skip_null(i int) !int {
 	return i + 4
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) skip_false(i int) !int {
 	if i + 4 >= p.str.len {
 		return p.fail(p.str.len, 'Expected "false" but encountered an end when parsing the primitive')
@@ -318,7 +318,7 @@ fn (mut p Parser) skip_false(i int) !int {
 	return i + 5
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) skip_true(i int) !int {
 	if i + 3 >= p.str.len {
 		return p.fail(p.str.len, 'Expected "true" but encountered an end when parsing the primitive')
@@ -344,7 +344,7 @@ fn (mut p Parser) parse_number(i int) !(f64, int) {
 	return n, unsafe { &u8(end) - p.str.str }
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 	first := from + 1
 	mut i, esc := p.detect_escape(first, quote)!
@@ -393,7 +393,7 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 	return p.fail(i, 'Unexpected end encountered when parsing a string')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_escape_sequence(mut builder strings.Builder, from int) !int {
 	mut i := from + 1
 	if i == p.str.len {
@@ -436,7 +436,7 @@ fn (mut p Parser) parse_escape_sequence(mut builder strings.Builder, from int) !
 	return i + 1
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 	mut i := from
 	for i < p.str.len {
@@ -466,7 +466,7 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 	return p.fail(i, 'Unexpected end encountered when parsing a string')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) parse_unicode(from int) !(u16, int) {
 	if from + 4 > p.str.len {
 		return p.fail(from, 'Expected unicode sequence "\\u...." but encountered an end when parsing a string')

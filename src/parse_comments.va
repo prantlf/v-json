@@ -19,7 +19,7 @@ pub fn parse_with_comments(str string, opts &ParseOpts) !Any {
 	return p.parse()!
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Parser) skip_comment_2(from int) !int {
 	mut i := from + 1
 	if i == p.str.len {

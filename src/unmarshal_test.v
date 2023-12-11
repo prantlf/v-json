@@ -261,12 +261,12 @@ fn test_unmarshal_struct_in_struct() {
 // }
 
 struct Attributes {
-	int    int    [required]
-	bool   bool   [skip]
+	int    int    @[required]
+	bool   bool   @[skip]
 	string string
-	f64    f64    [json: float; required]
-	u8     u8     [nooverflow]
-	u16    u16    [nullable]
+	f64    f64    @[json: float; required]
+	u8     u8     @[nooverflow]
+	u16    u16    @[nullable]
 }
 
 fn test_attributes() {

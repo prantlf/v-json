@@ -36,7 +36,7 @@ pub fn scan(str string, opts &ScanOpts) !Any {
 	return any
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) parse_value(i int) !(Any, int) {
 	c := p.str[i]
 	match c {
@@ -76,7 +76,7 @@ fn (mut p Scanner) find_start() !int {
 	return p.skip_space(from, 'Unexpected end when starting to parse')!
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) skip_space(from int, msg string) !int {
 	mut i := from
 	for i < p.str.len {
@@ -111,7 +111,7 @@ fn (mut p Scanner) skip_space(from int, msg string) !int {
 	return i
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) skip_comment(from int) !int {
 	mut i := from + 1
 	if i == p.str.len {
@@ -160,7 +160,7 @@ fn (mut p Scanner) skip_comment(from int) !int {
 	return i
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) after_bom() int {
 	if p.str.len >= 3 {
 		unsafe {
@@ -173,7 +173,7 @@ fn (mut p Scanner) after_bom() int {
 	return 0
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) check_end(from int) ! {
 	mut i := from
 	for i < p.str.len {
@@ -201,7 +201,7 @@ fn (mut p Scanner) check_end(from int) ! {
 	}
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) parse_array(from int) !([]Any, int) {
 	mut arr := []Any{}
 	mut i := from + 1
@@ -234,7 +234,7 @@ fn (mut p Scanner) parse_array(from int) !([]Any, int) {
 	return p.fail(i, 'Unexpected end encountered when parsing an array')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) parse_object(from int) !(map[string]Any, int) {
 	mut obj := map[string]Any{}
 	mut i := from + 1
@@ -275,7 +275,7 @@ fn (mut p Scanner) parse_object(from int) !(map[string]Any, int) {
 	return p.fail(i, 'Unexpected end encountered when parsing an object')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) parse_key(i int) !(string, int) {
 	c := p.str[i]
 	if c != `"` {
@@ -284,7 +284,7 @@ fn (mut p Scanner) parse_key(i int) !(string, int) {
 	return p.parse_string(i)!
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) skip_null(i int) !int {
 	if i + 3 >= p.str.len {
 		return p.fail(p.str.len, 'Expected "null" but encountered an end when parsing the primitive')
@@ -295,7 +295,7 @@ fn (mut p Scanner) skip_null(i int) !int {
 	return i + 4
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) skip_false(i int) !int {
 	if i + 4 >= p.str.len {
 		return p.fail(p.str.len, 'Expected "false" but encountered an end when parsing the primitive')
@@ -306,7 +306,7 @@ fn (mut p Scanner) skip_false(i int) !int {
 	return i + 5
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) skip_true(i int) !int {
 	if i + 3 >= p.str.len {
 		return p.fail(p.str.len, 'Expected "true" but encountered an end when parsing the primitive')
@@ -332,7 +332,7 @@ fn (mut p Scanner) parse_number(i int) !(f64, int) {
 	return n, unsafe { &u8(end) - p.str.str }
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) parse_string(from int) !(string, int) {
 	first := from + 1
 	mut i, mut c, esc := p.detect_escape(first)!
@@ -384,7 +384,7 @@ fn (mut p Scanner) parse_string(from int) !(string, int) {
 	return p.fail(i, 'Unexpected end encountered when parsing a string')
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn (mut p Scanner) detect_escape(from int) !(int, u8, bool) {
 	mut i := from
 	for i < p.str.len {

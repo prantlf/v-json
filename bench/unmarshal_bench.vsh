@@ -6,15 +6,15 @@ import json
 // import prantlf.json as json2
 
 struct HarPageTimings {
-	on_content_load f64 [json: 'onContentLoad']
-	on_load         f64 [json: 'onLoad']
+	on_content_load f64 @[json: 'onContentLoad']
+	on_load         f64 @[json: 'onLoad']
 }
 
 struct HarPage {
-	started_date_time string         [json: 'startedDateTime']
+	started_date_time string         @[json: 'startedDateTime']
 	id                string
 	title             string
-	page_timings      HarPageTimings [json: 'pageTimings']
+	page_timings      HarPageTimings @[json: 'pageTimings']
 }
 
 struct HarCreator {
@@ -23,7 +23,7 @@ struct HarCreator {
 }
 
 struct HarInitiaor {
-	typ string [json: 'type']
+	typ string @[json: 'type']
 }
 
 struct HarCache {
@@ -40,36 +40,36 @@ struct HarCookie {
 	path      string
 	domain    string
 	expires   string
-	http_hnly bool   [json: 'httpOnly']
+	http_hnly bool   @[json: 'httpOnly']
 	secure    bool
 }
 
 struct HarRequest {
 	method       string
 	url          string
-	http_version string         [json: 'httpVersion']
+	http_version string         @[json: 'httpVersion']
 	headers      []HarNameValue
-	query_string []HarNameValue [json: 'queryString']
+	query_string []HarNameValue @[json: 'queryString']
 	cookies      []HarCookie
-	headers_size int            [json: 'headersSize']
-	body_size    i64            [json: 'headersSize']
+	headers_size int            @[json: 'headersSize']
+	body_size    i64            @[json: 'headersSize']
 }
 
 struct HarContent {
 	size          i64
-	mime_type     string [json: 'mimeType']
+	mime_type     string @[json: 'mimeType']
 	text          string
-	redirect_url  string [json: 'redirectURL']
-	headers_size  int    [json: 'headersSize']
-	body_size     i64    [json: 'headersSize']
-	transfer_size i64    [json: 'bodySize']
-	error         string [json: '_error']
+	redirect_url  string @[json: 'redirectURL']
+	headers_size  int    @[json: 'headersSize']
+	body_size     i64    @[json: 'headersSize']
+	transfer_size i64    @[json: 'bodySize']
+	error         string @[json: '_error']
 }
 
 struct HarResponse {
 	status       i16
-	status_text  string      [json: 'statusText']
-	http_version string      [json: 'httpVersion']
+	status_text  string      @[json: 'statusText']
+	http_version string      @[json: 'httpVersion']
 	cookies      []HarCookie
 	content      HarContent
 }
@@ -82,20 +82,20 @@ struct HarTimings {
 	send             f64
 	wait             f64
 	receive          f64
-	blocked_queueing f64 [json: '_blocked_queueing']
+	blocked_queueing f64 @[json: '_blocked_queueing']
 }
 
 struct HarEntry {
-	initiator         HarInitiaor [json: '_initiator']
-	priority          string      [json: '_priority']
-	resource_type     string      [json: '_resourceType']
+	initiator         HarInitiaor @[json: '_initiator']
+	priority          string      @[json: '_priority']
+	resource_type     string      @[json: '_resourceType']
 	cache             HarCache
 	connection        string
 	pageref           string
 	request           HarRequest
 	response          HarResponse
-	server_ip_address string      [json: 'serverIPAddress']
-	started_date_time string      [json: 'startedDateTime']
+	server_ip_address string      @[json: 'serverIPAddress']
+	started_date_time string      @[json: 'startedDateTime']
 	time              f64
 	timings           HarTimings
 }

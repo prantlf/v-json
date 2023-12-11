@@ -99,7 +99,7 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 }
 */
 
-[direct_array_access]
+@[direct_array_access]
 fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 	escape_unicode := opts.escape_unicode
 	escape_slashes := opts.escape_slashes
@@ -261,7 +261,7 @@ fn get_surrogates(utf32 u32) (u16, u16) {
 	return high, low
 }
 
-[direct_array_access]
+@[direct_array_access]
 fn u16_to_hex(nn u16, mut buf []u8) {
 	mut n := nn
 	for i := 3; i >= 0; i-- {
