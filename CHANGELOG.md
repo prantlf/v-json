@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.3](https://github.com/prantlf/v-json/compare/v0.1.2...v0.1.3) (2023-12-11)
+
+### Bug Fixes
+
+* Adapt for V langage changes ([cf6f61f](https://github.com/prantlf/v-json/commit/cf6f61fc2fdbb67b3aae08f374892e16aa47ad2e))
+
 ## [0.1.2](https://github.com/prantlf/v-json/compare/v0.1.1...v0.1.2) (2023-11-14)
 
 ### Bug Fixes
