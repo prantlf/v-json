@@ -53,7 +53,7 @@ fn write_any(mut builder Builder, a Any, level int, opts &StringifyOpts) {
 			write_raw(mut builder, number_to_string(a))
 		}
 		string {
-			write_string(mut builder, a, opts)
+			write_string(mut builder, a, opts, true)
 		}
 		[]Any {
 			write_array(mut builder, a, level, opts)
@@ -105,11 +105,13 @@ fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
 */
 
 @[direct_array_access]
-fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
+fn write_string(mut builder Builder, s string, opts &StringifyOpts, include_quotes bool) {
 	escape_unicode := opts.escape_unicode
 	escape_slashes := opts.escape_slashes
 	quote := opts.quote
-	builder.write_u8(quote)
+	if include_quotes {
+		builder.write_u8(quote)
+	}
 	len := s.len
 	mut cur := 0
 	for cur < len {
@@ -169,7 +171,9 @@ fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
 			cur += rune_len
 		}
 	}
-	builder.write_u8(quote)
+	if include_quotes {
+		builder.write_u8(quote)
+	}
 }
 
 fn write_array(mut builder Builder, array []Any, level int, opts &StringifyOpts) {
@@ -204,7 +208,7 @@ fn write_object(mut builder Builder, object map[string]Any, level int, opts &Str
 		if level > 0 {
 			write_indent(mut builder, level)
 		}
-		write_string(mut builder, key, opts)
+		write_string(mut builder, key, opts, true)
 		builder.write_u8(`:`)
 		if level > 0 {
 			builder.write_u8(` `)

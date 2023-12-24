@@ -99,12 +99,12 @@ fn test_stringify_escape_slashes() {
 }
 
 fn test_stringify_whitespace() {
-	r := stringify_opt(Any('\b\f\n\r\t '), StringifyOpts{ escape_slashes: true })
+	r := stringify(Any('\b\f\n\r\t '))
 	assert r == '"\\b\\f\\n\\r\\t "'
 }
 
 fn test_stringify_escape_control_chars() {
-	r := stringify_opt(Any('\u0001\u000e\u0011\u001e'), StringifyOpts{ escape_slashes: true })
+	r := stringify(Any('\u0001\u000e\u0011\u001e'))
 	assert r == '"\\u0001\\u000e\\u0011\\u001e"'
 }
 

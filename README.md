@@ -107,7 +107,7 @@ Parses an `Any` value from a string in the JSON format. See [jany] for more info
 any := parse(input, ParseOpts{})!
 ```
 
-### stringify(any Any, opts &StringifyOpts) !string
+### stringify(any Any, opts &StringifyOpts) string
 
 Formats an `Any` value to a string according to the JSON specification. See [jany] for more information about the `Any` type. Fields available in `StringifyOpts`:
 
@@ -120,7 +120,7 @@ Formats an `Any` value to a string according to the JSON specification. See [jan
 | `escape_unicode`  | `bool` | `false` | escape multibyte Unicode characters with `\u` literals                |
 
 ```go
-str := stringify(any, StringifyOpts{ pretty: true })!
+str := stringify(any, StringifyOpts{ pretty: true })
 ```
 
 ### marshal[T](value T, opts &MarshalOpts) !string
@@ -196,6 +196,30 @@ json := '{
 
 mut config := Config{}
 config := unmarshal_to(json, mut config, UnmarshalOpts{})!
+```
+
+### escape(s string) string
+
+Formats a `string` value for being used in JSON strings by escaping sensitive characters by backslashes according to the JSON specification.
+
+```go
+str := escape('...')!
+```
+
+### escape_opt(s string, opts &EscapeOpts) string
+
+Formats a `string` value for being used in JSON strings by escaping sensitive characters by backslashes with options to customise the operation beyond the JSON specification. Fields available in `EscapeOpts`:
+
+| Name              | Type   | Default | Description                                                           |
+|:------------------|:-------|:--------|:----------------------------------------------------------------------|
+| `single_quotes`   | `bool` | `false` | escape single quotes, keep double quotes unescaped                    |
+| `escape_slashes`  | `bool` | `false` | escape slashes by prefixing them with a backslash (reverse solidus)   |
+| `escape_unicode`  | `bool` | `false` | escape multibyte Unicode characters with `\u` literals                |
+
+By default, double quotes are considered delimiters, which need escaping. This can be changed by setting `single_quotes` to `true`.
+
+```go
+str := escape_opt('...', EscapeOpts{ escape_unicode: true })!
 ```
 
 ## Errors

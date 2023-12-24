@@ -39,7 +39,7 @@ fn marshal_any[T](mut builder Builder, val T, level int, opts &MarshalOpts) {
 	$if T is $enum {
 		marshal_enum(mut builder, val, opts)
 	} $else $if T is string {
-		write_string(mut builder, val, &StringifyOpts(opts))
+		write_string(mut builder, val, &StringifyOpts(opts), true)
 	} $else $if T is $array {
 		marshal_array(mut builder, val, level, opts)
 	} $else $if T is $map {
@@ -98,7 +98,7 @@ fn marshal_array[T](mut builder Builder, array []T, level int, opts &MarshalOpts
 		// $if T is $enum {
 		// 	marshal_enum(mut builder, item, opts)
 		// } $else $if T is string {
-		// 	write_string(mut builder, item, &StringifyOpts(opts))
+		// 	write_string(mut builder, item, &StringifyOpts(opts), true)
 		// } $else $if T is $array {
 		// 	marshal_array(mut builder, item, newlevel, opts)
 		// } $else $if T is $map {
@@ -131,7 +131,7 @@ fn marshal_map[T](mut builder Builder, object map[string]T, level int, opts &Mar
 		if level > 0 {
 			write_indent(mut builder, level)
 		}
-		write_string(mut builder, key, &StringifyOpts(opts))
+		write_string(mut builder, key, &StringifyOpts(opts), true)
 		builder.write_u8(`:`)
 		if level > 0 {
 			builder.write_u8(` `)
@@ -173,7 +173,7 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 				write_indent(mut builder, level)
 			}
 
-			write_string(mut builder, json_name, &StringifyOpts(opts))
+			write_string(mut builder, json_name, &StringifyOpts(opts), true)
 			builder.write_u8(`:`)
 			if level > 0 {
 				builder.write_u8(` `)
@@ -195,12 +195,12 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 				item := object.$(field.name)
 				$if field.is_option {
 					if val := item {
-						write_string(mut builder, val, &StringifyOpts(opts))
+						write_string(mut builder, val, &StringifyOpts(opts), true)
 					} else {
 						write_raw(mut builder, null_str)
 					}
 				} $else {
-					write_string(mut builder, item, &StringifyOpts(opts))
+					write_string(mut builder, item, &StringifyOpts(opts), true)
 				}
 			} $else $if field.is_array {
 				item := object.$(field.name)
