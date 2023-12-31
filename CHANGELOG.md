@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.4](https://github.com/prantlf/v-json/compare/v0.1.3...v0.1.4) (2023-12-31)
+
+### Bug Fixes
+
+* Fix writing through UTF-8 bytes to builder ([a799e1a](https://github.com/prantlf/v-json/commit/a799e1a72e17d79fc43a5407c7dc030b0b23ba7c))
+
 ## [0.1.3](https://github.com/prantlf/v-json/compare/v0.1.2...v0.1.3) (2023-12-11)
 
 ### Bug Fixes
