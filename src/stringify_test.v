@@ -112,3 +112,8 @@ fn test_stringify_escape_unicode() {
 	r := stringify(Any('ö∑😁'), StringifyOpts{ escape_unicode: true })
 	assert r == '"\\u00f6\\u2211\\ud83d\\ude01"'
 }
+
+fn test_parse_and_write_u8() {
+	r := stringify(Any('\np’s'), StringifyOpts{})
+	assert r == '"\\np’s"'
+}

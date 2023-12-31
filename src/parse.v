@@ -382,13 +382,8 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 			i++
 			continue
 		}
-		builder.write_u8(c)
+		unsafe { builder.push_many(p.str.str + i, rune_len) }
 		i += rune_len
-		rune_len--
-		for rune_len > 0 {
-			builder.write_u8(p.str[rune_len])
-			rune_len--
-		}
 	}
 	return p.fail(i, 'Unexpected end encountered when parsing a string')
 }

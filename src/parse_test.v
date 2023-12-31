@@ -525,3 +525,8 @@ fn test_parse_unicode() {
 	r := parse('"\\u2211\\ud83d\\ude01"', ParseOpts{})!
 	assert r == Any('∑😁')
 }
+
+fn test_parse_and_write_u8() {
+	r := parse('"\\np’s"', ParseOpts{})!
+	assert r == Any('\np’s')
+}

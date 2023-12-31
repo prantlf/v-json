@@ -148,25 +148,20 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 			mut buf := []u8{len: 4}
 			if utf32 < 0x10000 {
 				u16_to_hex(u16(utf32), mut buf)
-				unsafe { builder.write_ptr(buf.data, 4) }
+				unsafe { builder.push_many(buf.data, 4) }
 			} else {
 				high, low := get_surrogates(u32(utf32))
 				u16_to_hex(high, mut buf)
-				unsafe { builder.write_ptr(buf.data, 4) }
+				unsafe { builder.push_many(buf.data, 4) }
 				builder.write_u8(`\\`)
 				builder.write_u8(`u`)
 				u16_to_hex(low, mut buf)
-				unsafe { builder.write_ptr(buf.data, 4) }
+				unsafe { builder.push_many(buf.data, 4) }
 			}
 			cur += rune_len
 		} else {
-			builder.write_u8(ch)
-			rune_end := cur + rune_len
-			cur++
-			for cur < rune_end {
-				builder.write_u8(s[cur])
-				cur++
-			}
+			unsafe { builder.push_many(s.str + cur, rune_len) }
+			cur += rune_len
 		}
 	}
 	builder.write_u8(quote)
