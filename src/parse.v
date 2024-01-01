@@ -1,6 +1,6 @@
 module json
 
-import strings
+import strings { Builder }
 import prantlf.jany { Any }
 
 #include <stdlib.h>
@@ -23,7 +23,12 @@ mut:
 	line_start int
 }
 
-pub fn parse(str string, opts &ParseOpts) !Any {
+@[inline]
+pub fn parse(str string) !Any {
+	return parse_opt(str, &ParseOpts{})!
+}
+
+pub fn parse_opt(str string, opts &ParseOpts) !Any {
 	mut p := Parser{
 		opts: unsafe { opts }
 		str: str
@@ -389,7 +394,7 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 }
 
 @[direct_array_access]
-fn (mut p Parser) parse_escape_sequence(mut builder strings.Builder, from int) !int {
+fn (mut p Parser) parse_escape_sequence(mut builder Builder, from int) !int {
 	mut i := from + 1
 	if i == p.str.len {
 		return p.fail(i, 'Unfinished escape sequence encountered when parsing a string')

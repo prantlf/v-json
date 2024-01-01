@@ -11,7 +11,7 @@ struct HarPageTimings {
 	on_load         f64 @[json: 'onLoad']
 }
 
-struct HarPage {
+pub struct HarPage {
 	started_date_time string         @[json: 'startedDateTime']
 	id                string
 	title             string
@@ -101,7 +101,7 @@ struct HarEntry {
 	timings           HarTimings
 }
 
-struct HarLog {
+pub struct HarLog {
 	version string
 	creator HarCreator
 	pages   []HarPage
@@ -112,39 +112,43 @@ struct Har {
 	log HarLog
 }
 
-const repeats = 20
+const repeats = 20000
 
-condensed := os.read_file('vlang.io.har.condensed.json')!
-pretty := os.read_file('vlang.io.har.pretty.json')!
+raw := os.read_file('vlang.io.har.condensed.json')!
+har := json.decode(Har, raw)!
+
+pretty := json3.MarshalOpts{
+	pretty: true
+}
 
 mut b := benchmark.start()
 
 for _ in 0 .. repeats {
-	json.decode(Har, condensed)!
+	json.encode(har)
 }
-b.measure('unmarshalling condensed with json')
+b.measure('marshalling condensed with json')
 
 for _ in 0 .. repeats {
-	json2.decode[Har](condensed)!
+	json2.encode(har)
 }
-b.measure('unmarshalling condensed with x.json2')
+b.measure('marshalling condensed with x.json2')
 
 for _ in 0 .. repeats {
-	json3.unmarshal[Har](condensed)!
+	json3.marshal(har)
 }
-b.measure('unmarshalling condensed with prantlf.json')
+b.measure('marshalling condensed with prantlf.json')
 
 for _ in 0 .. repeats {
-	json.decode(Har, pretty)!
+	json.encode_pretty(har)
 }
-b.measure('unmarshalling pretty with json')
+b.measure('marshalling pretty with json')
 
 for _ in 0 .. repeats {
-	json2.decode[Har](pretty)!
+	json2.encode_pretty(har)
 }
-b.measure('unmarshalling pretty with x.json2')
+b.measure('marshalling pretty with x.json2')
 
 for _ in 0 .. repeats {
-	json3.unmarshal[Har](pretty)!
+	json3.marshal_opt(har, &pretty)
 }
-b.measure('unmarshalling pretty with prantlf.json')
+b.measure('marshalling pretty with prantlf.json')

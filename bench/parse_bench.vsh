@@ -1,16 +1,14 @@
-#!/usr/bin/env -S v -prod run
+#!/usr/bin/env -S v -prod -use-os-system-to-run run
 
 import benchmark
 import os
 import x.json2
-import prantlf.json
+import prantlf.json as json3
 
 const repeats = 20
 
 condensed := os.read_file('vlang.io.har.condensed.json')!
 pretty := os.read_file('vlang.io.har.pretty.json')!
-
-opts := json.ParseOpts{}
 
 mut b := benchmark.start()
 
@@ -20,7 +18,7 @@ for _ in 0 .. repeats {
 b.measure('parsing condensed with x.json2')
 
 for _ in 0 .. repeats {
-	json.parse(condensed, &opts)!
+	json3.parse(condensed)!
 }
 b.measure('parsing condensed with prantlf.json')
 
@@ -30,6 +28,6 @@ for _ in 0 .. repeats {
 b.measure('parsing pretty with x.json2')
 
 for _ in 0 .. repeats {
-	json.parse(pretty, &opts)!
+	json3.parse(pretty)!
 }
 b.measure('parsing pretty with prantlf.json')

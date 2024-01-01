@@ -1,7 +1,7 @@
 module json
 
 import os
-import strings
+import strings { Builder }
 import term
 
 @[noinit]
@@ -47,7 +47,7 @@ pub fn (e &JsonError) msg_full() string {
 	return '${on}${e.reason}${off}:\n${builder.str()}'
 }
 
-fn write_context(mut builder strings.Builder, lines []string, start_line int, num_len int, eol_before bool, colors bool) int {
+fn write_context(mut builder Builder, lines []string, start_line int, num_len int, eol_before bool, colors bool) int {
 	mut on := ''
 	mut off := ''
 	if colors {
@@ -80,7 +80,7 @@ fn write_context(mut builder strings.Builder, lines []string, start_line int, nu
 	return line_num
 }
 
-fn write_pointer(mut builder strings.Builder, num_len int, head_len int, colors bool) {
+fn write_pointer(mut builder Builder, num_len int, head_len int, colors bool) {
 	mut on1 := ''
 	mut on2 := ''
 	mut off := ''

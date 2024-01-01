@@ -1,6 +1,6 @@
 module json
 
-import strings
+import strings { Builder }
 import encoding.utf8
 import prantlf.jany { Any, Null }
 
@@ -15,7 +15,12 @@ mut:
 	quote u8
 }
 
-pub fn stringify(a Any, opts &StringifyOpts) string {
+@[inline]
+pub fn stringify(a Any) string {
+	return stringify_opt(a, &StringifyOpts{})
+}
+
+pub fn stringify_opt(a Any, opts &StringifyOpts) string {
 	if opts.single_quotes {
 		unsafe {
 			opts.quote = `'`
@@ -36,7 +41,7 @@ pub fn stringify(a Any, opts &StringifyOpts) string {
 	return builder.str()
 }
 
-fn write_any(mut builder strings.Builder, a Any, level int, opts &StringifyOpts) {
+fn write_any(mut builder Builder, a Any, level int, opts &StringifyOpts) {
 	match a {
 		Null {
 			write_raw(mut builder, json.null_str)
@@ -59,7 +64,7 @@ fn write_any(mut builder strings.Builder, a Any, level int, opts &StringifyOpts)
 	}
 }
 
-fn write_raw(mut builder strings.Builder, s string) {
+fn write_raw(mut builder Builder, s string) {
 	unsafe { builder.write_ptr(s.str, s.len) }
 }
 
@@ -68,7 +73,7 @@ const escapable = [u8(`\b`), u8(`\f`), u8(`\n`), u8(`\r`), u8(`\t`)]
 const escaped = [u8(`b`), u8(`f`), u8(`n`), u8(`r`), u8(`t`)]
 
 /*
-fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
+fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
 	quote := opts.quote
 	builder.write_u8(quote)
 	len := s.len
@@ -100,7 +105,7 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 */
 
 @[direct_array_access]
-fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
+fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
 	escape_unicode := opts.escape_unicode
 	escape_slashes := opts.escape_slashes
 	quote := opts.quote
@@ -167,7 +172,7 @@ fn write_string(mut builder strings.Builder, s string, opts &StringifyOpts) {
 	builder.write_u8(quote)
 }
 
-fn write_array(mut builder strings.Builder, array []Any, level int, opts &StringifyOpts) {
+fn write_array(mut builder Builder, array []Any, level int, opts &StringifyOpts) {
 	builder.write_u8(`[`)
 	newlevel := next_level(level)
 	last := array.len - 1
@@ -186,7 +191,7 @@ fn write_array(mut builder strings.Builder, array []Any, level int, opts &String
 	builder.write_u8(`]`)
 }
 
-fn write_object(mut builder strings.Builder, object map[string]Any, level int, opts &StringifyOpts) {
+fn write_object(mut builder Builder, object map[string]Any, level int, opts &StringifyOpts) {
 	builder.write_u8(`{`)
 	newlevel := next_level(level)
 	mut next := false
@@ -219,7 +224,7 @@ fn next_level(level int) int {
 	return if level > 0 { level + 1 } else { 0 }
 }
 
-fn write_indent(mut builder strings.Builder, level int) {
+fn write_indent(mut builder Builder, level int) {
 	builder.write_u8(`\n`)
 	for i := 0; i < level * 2; i++ {
 		builder.write_u8(` `)

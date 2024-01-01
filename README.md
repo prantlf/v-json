@@ -223,23 +223,45 @@ The message is formatted using the error fields, for example:
 
 ## Performance
 
-This module is almost 3.8x faster than `x.json2` when parsing:
+This module is around 4x faster than `x.json2` when parsing:
 
     ❯ ./parse_bench.vsh
 
-    SPENT  1082.011 ms in parsing condensed with x.json2
-    SPENT   283.197 ms in parsing condensed with prantlf.json
-    SPENT  1047.946 ms in parsing pretty with x.json2
-    SPENT   284.696 ms in parsing pretty with prantlf.json
+    SPENT  1130.785 ms in parsing condensed with x.json2
+    SPENT   282.204 ms in parsing condensed with prantlf.json
+    SPENT  1071.293 ms in parsing pretty with x.json2
+    SPENT   271.030 ms in parsing pretty with prantlf.json
 
-and almost 3.5x faster when stringifying:
+and almost 3x faster when stringifying:
 
     ❯ ./stringify_bench.vsh
 
-    SPENT  1271.921 ms in stringifying condensed with x.json2
-    SPENT   380.261 ms in stringifying condensed with prantlf.json
-    SPENT  1386.552 ms in stringifying pretty with x.json2
-    SPENT   398.728 ms in stringifying pretty with prantlf.json
+    SPENT  1201.283 ms in stringifying condensed with x.json2
+    SPENT   439.548 ms in stringifying condensed with prantlf.json
+    SPENT  1307.802 ms in stringifying pretty with x.json2
+    SPENT   445.283 ms in stringifying pretty with prantlf.json
+
+and almost 4x faster when unmarshalling:
+
+    ❯ ./unmarshal_bench.vsh
+
+    SPENT   155.405 ms in unmarshalling condensed with json
+    SPENT  1184.805 ms in unmarshalling condensed with x.json2
+    SPENT   330.345 ms in unmarshalling condensed with prantlf.json
+    SPENT   153.020 ms in unmarshalling pretty with json
+    SPENT  1172.505 ms in unmarshalling pretty with x.json2
+    SPENT   304.557 ms in unmarshalling pretty with prantlf.json
+
+and more than 46x and in the pretty mode more than 68x faster when marshalling:
+
+    ❯ ./marshal_bench.vsh
+
+    SPENT    96.876 ms in marshalling condensed with json
+    SPENT   516.113 ms in marshalling condensed with x.json2
+    SPENT    11.678 ms in marshalling condensed with prantlf.json
+    SPENT    87.807 ms in marshalling pretty with json
+    SPENT  1027.831 ms in marshalling pretty with x.json2
+    SPENT    15.724 ms in marshalling pretty with prantlf.json
 
 ## TODO
 
