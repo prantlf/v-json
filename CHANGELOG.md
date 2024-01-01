@@ -1,5 +1,27 @@
 # Changes
 
+## [0.2.0](https://github.com/prantlf/v-json/compare/v0.1.4...v0.2.0) (2024-01-01)
+
+### Features
+
+* Implement marshal without Any, introduce marshal_opt ([31b1257](https://github.com/prantlf/v-json/commit/31b1257b8c177b2e3ca74124c7322bfdd3aa312d))
+* Remove options from parse, stringify and unmarshal ([cbf9de6](https://github.com/prantlf/v-json/commit/cbf9de6ec0885b0854a81636ea9ded6f9767e417))
+* Add escape and escape_opt for just escaping string values ([a4d20b5](https://github.com/prantlf/v-json/commit/a4d20b5512536a3498bfe92f46b5adab4725fca3))
+
+### BREAKING CHANGES
+
+If you just pass default options to the functions,
+just delete them. They do not expect options any more. If you use
+non-empty options, replace the function name with `<name>_opt`,
+which supports options.
+
+If you just pass default options to `marshal`,
+just delete them. The `marshal` does not expect options. If you
+use non-empty options, replace `marshal` with `marshal_opt`,
+which supports options. Also, although replacing the implementation
+should not change the behaviour of the interface, there might be
+bugs, which the existing tests had not discovered.
+
 ## [0.1.4](https://github.com/prantlf/v-json/compare/v0.1.3...v0.1.4) (2023-12-31)
 
 ### Bug Fixes

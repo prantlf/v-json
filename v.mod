@@ -1,7 +1,7 @@
 Module {
 	name: 'json'
 	description: 'Strictly parse and format JSON/JSONC/JSON5 data.'
-	version: '0.1.4'
+	version: '0.2.0'
 	license: 'MIT'
 	dependencies: ['prantlf.jany']
 }
