@@ -287,13 +287,15 @@ and more than 46x and in the pretty mode more than 68x faster when marshalling:
     SPENT  1027.831 ms in marshalling pretty with x.json2
     SPENT    15.724 ms in marshalling pretty with prantlf.json
 
-## TODO
+## Contributing
 
-This is a work in progress.
+In lieu of a formal styleguide, take care to maintain the existing coding style. Lint and test your code.
 
-* Support `replacer` for `stringify` and `marshal` and `reviver` for `parse` and `unmarshal`.
-* Finish the [JSON5] support.
-* Help fixing a bug in V - generics doesn't support nested structs.
+## License
+
+Copyright (c) 2023-2024 Ferdinand Prantl
+
+Licensed under the MIT license.
 
 [VPM]: https://vpm.vlang.io/packages/prantlf.json
 [prantlf.jany]: https://github.com/prantlf/v-jany
