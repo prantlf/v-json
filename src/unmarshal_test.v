@@ -282,6 +282,6 @@ fn test_attributes() {
 	assert r.bool == false
 	assert r.string == ''
 	assert r.f64 == 2.3
-	assert r.u8 == u8(1234)
+	assert r.u8 == u8(210)
 	assert r.u16 == 0
 }
