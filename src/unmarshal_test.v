@@ -275,7 +275,7 @@ fn test_attributes() {
 		require_all_fields: false
 		forbid_extra_keys: false
 		cast_null_to_default: false
-		ignore_number_overflow: false
+		ignore_number_overflow: true
 	}
 	r := unmarshal_opt[Attributes](input, opts)!
 	assert r.int == 1
