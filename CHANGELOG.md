@@ -1,5 +1,11 @@
 # Changes
 
+## [0.2.2](https://github.com/prantlf/v-json/compare/v0.2.1...v0.2.2) (2024-03-24)
+
+### Bug Fixes
+
+* Add the now mandatory & for passing references ([5e910c8](https://github.com/prantlf/v-json/commit/5e910c852067a2be2278d5146d7a52ead9557e39))
+
 ## [0.2.1](https://github.com/prantlf/v-json/compare/v0.2.0...v0.2.1) (2024-01-28)
 
 ### Bug Fixes
