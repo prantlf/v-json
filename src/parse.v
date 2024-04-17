@@ -340,7 +340,7 @@ fn (mut p Parser) parse_number(i int) !(f64, int) {
 	n := C.strtod(unsafe { p.str.str + i }, &end)
 	if C.errno != 0 {
 		val := if end != unsafe { nil } {
-			unsafe { tos(p.str.str + i, &u8(end) - p.str.str + i) }
+			unsafe { tos(p.str.str + i, &u8(end) - p.str.str + i).clone() }
 		} else {
 			unsafe { tos(p.str.str + i, 1) }
 		}
@@ -354,7 +354,7 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 	first := from + 1
 	mut i, esc := p.detect_escape(first, quote)!
 	if !esc {
-		return unsafe { tos(p.str.str + first, i - first) }, i + 1
+		return unsafe { tos(p.str.str + first, i - first).clone() }, i + 1
 	}
 	mut builder := strings.new_builder(64)
 	for j := first; j < i; j++ {
