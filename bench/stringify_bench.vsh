@@ -10,7 +10,7 @@ const repeats = 10
 har := os.read_file('vlang.io.har.condensed.json')!
 
 any2 := json2.raw_decode(har)!
-any3 := json3.parse(har, &json3.ParseOpts{})!
+any3 := json3.parse(har)!
 
 pretty := json3.StringifyOpts{
 	pretty: true

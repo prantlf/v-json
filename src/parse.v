@@ -375,7 +375,7 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 				}
 				else {
 					if c < 32 {
-						idx := escapable.index(c)
+						idx := index_u8(escapable, c)
 						if idx >= 0 {
 							return p.fail(i, 'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
 						}
@@ -400,7 +400,7 @@ fn (mut p Parser) parse_escape_sequence(mut builder Builder, from int) !int {
 		return p.fail(i, 'Unfinished escape sequence encountered when parsing a string')
 	}
 	mut c := p.str[i]
-	idx := escaped.index(c)
+	idx := index_u8(escaped, c)
 	if idx >= 0 {
 		builder.write_u8(escapable[idx])
 	} else if c == `\\` || c == `/` || c == `"` || (c == `'` && p.opts.allow_single_quotes) {
@@ -452,7 +452,7 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 				}
 				else {
 					if c < 32 {
-						idx := escapable.index(c)
+						idx := index_u8(escapable, c)
 						if idx >= 0 {
 							return p.fail(i, 'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
 						}

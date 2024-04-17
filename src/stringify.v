@@ -68,9 +68,9 @@ fn write_raw(mut builder Builder, s string) {
 	unsafe { builder.write_ptr(s.str, s.len) }
 }
 
-const escapable = [u8(`\b`), u8(`\f`), u8(`\n`), u8(`\r`), u8(`\t`)]
+const escapable = [u8(`\b`), u8(`\f`), u8(`\n`), u8(`\r`), u8(`\t`)]!
 
-const escaped = [u8(`b`), u8(`f`), u8(`n`), u8(`r`), u8(`t`)]
+const escaped = [u8(`b`), u8(`f`), u8(`n`), u8(`r`), u8(`t`)]!
 
 /*
 fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
@@ -83,7 +83,7 @@ fn write_string(mut builder Builder, s string, opts &StringifyOpts) {
 		ch := s[cur]
 		rune_len := utf8_char_len(ch)
 		if rune_len == 1 {
-			idx := escapable.index(ch)
+			idx := index_u8(escapable, ch)
 			if idx >= 0 {
 				if prev < cur {
 					unsafe { builder.write_ptr(s.str + prev, cur - prev) }
@@ -122,7 +122,7 @@ fn write_string(mut builder Builder, s string, opts &StringifyOpts, include_quot
 				builder.write_u8(`\\`)
 				builder.write_u8(ch)
 			} else {
-				idx := json.escapable.index(ch)
+				idx := index_u8(json.escapable, ch)
 				if idx >= 0 {
 					builder.write_u8(`\\`)
 					builder.write_u8(json.escaped[idx])
@@ -274,3 +274,24 @@ fn u16_to_hex(nn u16, mut buf []u8) {
 		n >>= 4
 	}
 }
+
+@[direct_array_access]
+fn index_u8(arr [5]u8, val u8) int {
+	for i in 0 .. arr.len {
+		if arr[i] == val {
+			return i
+		}
+	}
+	return -1
+}
+
+// fn C.memchr(ptr charptr, value u8, num usize) charptr
+
+// fn index_u8(ptr charptr, value u8, num int) int {
+// 	pos := C.memchr(ptr, value, usize(num))
+// 	return if unsafe { pos != nil } {
+// 		unsafe { pos - ptr }
+// 	} else {
+// 		-1
+// 	}
+// }
