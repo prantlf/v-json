@@ -1,5 +1,11 @@
 # Changes
 
+## [0.2.4](https://github.com/prantlf/v-json/compare/v0.2.3...v0.2.4) (2024-04-17)
+
+### Bug Fixes
+
+* Clone unsafely created string saved in arrays ([1e300ab](https://github.com/prantlf/v-json/commit/1e300abbce966c76dad72f89b53e9cff708cdef7))
+
 ## [0.2.3](https://github.com/prantlf/v-json/compare/v0.2.2...v0.2.3) (2024-04-17)
 
 ### Bug Fixes
