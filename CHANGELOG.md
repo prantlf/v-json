@@ -1,5 +1,11 @@
 # Changes
 
+## [0.2.3](https://github.com/prantlf/v-json/compare/v0.2.2...v0.2.3) (2024-04-17)
+
+### Bug Fixes
+
+* Replace constant arrays with fixed arrays ([61c8554](https://github.com/prantlf/v-json/commit/61c8554e80f921a4afe8974d211ee70f001281f1))
+
 ## [0.2.2](https://github.com/prantlf/v-json/compare/v0.2.1...v0.2.2) (2024-03-24)
 
 ### Bug Fixes
