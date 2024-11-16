@@ -31,7 +31,7 @@ pub fn parse(str string) !Any {
 pub fn parse_opt(str string, opts &ParseOpts) !Any {
 	mut p := Parser{
 		opts: unsafe { opts }
-		str: str
+		str:  str
 	}
 
 	i := p.find_start()!

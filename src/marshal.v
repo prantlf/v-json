@@ -225,15 +225,17 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 					marshal_map(mut builder, item, newlevel, opts)
 				}
 			} $else $if field.is_struct {
-				item := object.$(field.name)
 				$if field.is_option {
+					item := object.$(field.name)
 					if val := item {
-						marshal_struct(mut builder, &val, newlevel, opts)
+						val_ref := &val
+						marshal_struct(mut builder, val_ref, newlevel, opts)
 					} else {
 						write_raw(mut builder, null_str)
 					}
 				} $else {
-					marshal_struct(mut builder, &item, newlevel, opts)
+					item := &(object.$(field.name))
+					marshal_struct(mut builder, item, newlevel, opts)
 				}
 				// } $else $if field.typ is int || field.typ is u8 || field.typ is u16 || field.typ is u32
 				// 	|| field.typ is u64 || field.typ is i8 || field.typ is i16 || field.typ is i64

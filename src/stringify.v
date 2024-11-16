@@ -44,7 +44,7 @@ pub fn stringify_opt(a Any, opts &StringifyOpts) string {
 fn write_any(mut builder Builder, a Any, level int, opts &StringifyOpts) {
 	match a {
 		Null {
-			write_raw(mut builder, json.null_str)
+			write_raw(mut builder, null_str)
 		}
 		bool {
 			write_raw(mut builder, bool_to_string(a))
@@ -122,10 +122,10 @@ fn write_string(mut builder Builder, s string, opts &StringifyOpts, include_quot
 				builder.write_u8(`\\`)
 				builder.write_u8(ch)
 			} else {
-				idx := index_u8(json.escapable, ch)
+				idx := index_u8(escapable, ch)
 				if idx >= 0 {
 					builder.write_u8(`\\`)
-					builder.write_u8(json.escaped[idx])
+					builder.write_u8(escaped[idx])
 				} else if ch < ` ` {
 					builder.write_u8(`\\`)
 					builder.write_u8(`u`)
@@ -243,9 +243,9 @@ const true_str = 'true'
 
 fn bool_to_string(b bool) string {
 	return if b {
-		json.true_str
+		true_str
 	} else {
-		json.false_str
+		false_str
 	}
 }
 

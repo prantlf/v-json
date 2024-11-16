@@ -12,7 +12,7 @@ struct HarPageTimings {
 }
 
 pub struct HarPage {
-	started_date_time string         @[json: 'startedDateTime']
+	started_date_time string @[json: 'startedDateTime']
 	id                string
 	title             string
 	page_timings      HarPageTimings @[json: 'pageTimings']
@@ -41,19 +41,19 @@ struct HarCookie {
 	path      string
 	domain    string
 	expires   string
-	http_hnly bool   @[json: 'httpOnly']
+	http_hnly bool @[json: 'httpOnly']
 	secure    bool
 }
 
 struct HarRequest {
 	method       string
 	url          string
-	http_version string         @[json: 'httpVersion']
+	http_version string @[json: 'httpVersion']
 	headers      []HarNameValue
 	query_string []HarNameValue @[json: 'queryString']
 	cookies      []HarCookie
-	headers_size int            @[json: 'headersSize']
-	body_size    i64            @[json: 'headersSize']
+	headers_size int @[json: 'headersSize']
+	body_size    i64 @[json: 'headersSize']
 }
 
 struct HarContent {
@@ -69,8 +69,8 @@ struct HarContent {
 
 struct HarResponse {
 	status       i16
-	status_text  string      @[json: 'statusText']
-	http_version string      @[json: 'httpVersion']
+	status_text  string @[json: 'statusText']
+	http_version string @[json: 'httpVersion']
 	cookies      []HarCookie
 	content      HarContent
 }
@@ -95,8 +95,8 @@ struct HarEntry {
 	pageref           string
 	request           HarRequest
 	response          HarResponse
-	server_ip_address string      @[json: 'serverIPAddress']
-	started_date_time string      @[json: 'startedDateTime']
+	server_ip_address string @[json: 'serverIPAddress']
+	started_date_time string @[json: 'startedDateTime']
 	time              f64
 	timings           HarTimings
 }

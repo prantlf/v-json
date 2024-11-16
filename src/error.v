@@ -105,14 +105,14 @@ fn (mut p Parser) fail(offset int, msg string) JsonError {
 	tail_error, tail_context := after_error(p.str, offset)
 
 	return JsonError{
-		reason: msg
+		reason:       msg
 		head_context: head_context
-		head_error: head_error
-		tail_error: tail_error
+		head_error:   head_error
+		tail_error:   tail_error
 		tail_context: tail_context
-		offset: offset + 1
-		line: p.line_start + 1
-		column: offset - p.line_start + 1
+		offset:       offset + 1
+		line:         p.line_start + 1
+		column:       offset - p.line_start + 1
 	}
 }
 

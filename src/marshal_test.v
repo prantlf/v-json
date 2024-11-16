@@ -287,39 +287,39 @@ fn test_marshal_struct_primitives_defaults() {
 
 fn test_marshal_struct_primitives_not_defaults() {
 	r := marshal(Primitives{
-		h: .woman
-		u8: 1
-		u16: 2
-		u32: 3
-		u64: 4
-		i8: 5
-		i16: 6
-		int: 7
-		i64: 8
-		f32: 9.1
-		f64: 9.2
+		h:      .woman
+		u8:     1
+		u16:    2
+		u32:    3
+		u64:    4
+		i8:     5
+		i16:    6
+		int:    7
+		i64:    8
+		f32:    9.1
+		f64:    9.2
 		string: 's'
-		bool: true
+		bool:   true
 	})
 	assert r == '{"h":1,"u8":1,"u16":2,"u32":3,"u64":4,"i8":5,"i16":6,"int":7,"i64":8,"f32":9.1,"f64":9.2,"string":"s","bool":true}'
 }
 
 struct Attributes {
-	int    int    @[required]
-	bool   bool   @[skip]
+	int    int  @[required]
+	bool   bool @[skip]
 	string string
-	f64    f64    @[json: float; required]
-	u8     u8     @[nooverflow]
-	u16    u16    @[nullable]
+	f64    f64 @[json: float; required]
+	u8     u8  @[nooverflow]
+	u16    u16 @[nullable]
 }
 
 fn test_attributes() {
 	input := Attributes{
-		int: 1
-		f64: 2.3
+		int:  1
+		f64:  2.3
 		bool: true
-		u8: 4
-		u16: 0
+		u8:   4
+		u16:  0
 	}
 	r := marshal(input)
 	assert r == '{"int":1,"string":"","float":2.3,"u8":4,"u16":0}'

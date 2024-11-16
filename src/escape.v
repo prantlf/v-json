@@ -19,7 +19,7 @@ pub fn escape(s string) string {
 pub fn escape_opt(s string, opts &EscapeOpts) string {
 	mut builder := strings.new_builder(s.len + 64)
 	mut str_opts := StringifyOpts{
-		single_quotes: opts.single_quotes
+		single_quotes:  opts.single_quotes
 		escape_slashes: opts.escape_slashes
 		escape_unicode: opts.escape_unicode
 	}
