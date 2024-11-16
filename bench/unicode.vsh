@@ -18,7 +18,7 @@ fn print_unicode(s string) {
 	println(s.len_utf8())
 	println(s.bytes())
 	println(s.runes())
-	utf32 := utf8.get_uchar(s, 0)
+	utf32 := utf8.get_rune(s, 0)
 	println(utf32.hex())
 	high, low := utf32_to_utf16(u32(utf32))
 	println('${high.hex()} ${low.hex()}')

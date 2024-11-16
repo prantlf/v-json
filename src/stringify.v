@@ -151,7 +151,7 @@ fn write_string(mut builder Builder, s string, opts &StringifyOpts, include_quot
 		} else if escape_unicode {
 			builder.write_u8(`\\`)
 			builder.write_u8(`u`)
-			utf32 := u32(utf8.get_uchar(s, cur))
+			utf32 := u32(utf8.get_rune(s, cur))
 			mut buf := []u8{len: 4}
 			if utf32 < 0x10000 {
 				u16_to_hex(u16(utf32), mut buf)
