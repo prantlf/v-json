@@ -1,5 +1,11 @@
 # Changes
 
+## [0.2.6](https://github.com/prantlf/v-json/compare/v0.2.5...v0.2.6) (2024-11-16)
+
+### Bug Fixes
+
+* Replace get_uchar with get_rune ([1f02e40](https://github.com/prantlf/v-json/commit/1f02e401e2e60bbe88fa51b4003c591b714ac5f5))
+
 ## [0.2.5](https://github.com/prantlf/v-json/compare/v0.2.4...v0.2.5) (2024-11-16)
 
 ### Bug Fixes
