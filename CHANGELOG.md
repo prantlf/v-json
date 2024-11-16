@@ -1,5 +1,12 @@
 # Changes
 
+## [0.2.5](https://github.com/prantlf/v-json/compare/v0.2.4...v0.2.5) (2024-11-16)
+
+### Bug Fixes
+
+* Replace deprecated index_u8_last with last_index_u8 ([60ee485](https://github.com/prantlf/v-json/commit/60ee4855256e64cfcb456f9fd3c4710d1f141c64))
+* Fix sources for the new V compiler ([7e10163](https://github.com/prantlf/v-json/commit/7e1016339260feaa31b16bd59bd6a9fc1acfd23d))
+
 ## [0.2.4](https://github.com/prantlf/v-json/compare/v0.2.3...v0.2.4) (2024-04-17)
 
 ### Bug Fixes
