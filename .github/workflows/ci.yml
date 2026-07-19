@@ -16,39 +16,23 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Test
-      run: make
+    - uses: actions/checkout@v7
+    - uses: prantlf/setup-v-action@v4
+    - run: make
 
   macos:
     runs-on: macos-latest
     steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Test
-      run: make
+    - uses: actions/checkout@v7
+    - uses: prantlf/setup-v-action@v4
+    - run: make
 
   windows:
     runs-on: windows-latest
     steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-      with:
-        install-dependencies: false
-    - name: Install Dependencies
-      run: |
-        md src\modules
-        md src\modules\prantlf
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-jany src\modules\prantlf\jany
-    - name: Test
-      run: cmd /c make.bat
+    - uses: actions/checkout@v7
+    - uses: prantlf/setup-v-action@v4
+    - run: cmd /c make.bat
 
   release:
     if: ${{ github.ref_name == 'master' }}
@@ -58,10 +42,8 @@ jobs:
       - windows
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout sources
-      uses: actions/checkout@v4
-    - name: Publish release
-      uses: prantlf/publish-release-action@v1
+    - uses: actions/checkout@v7
+    - uses: prantlf/publish-release-action@v2
       with:
         no-archives: true
       env:

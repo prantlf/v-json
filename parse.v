@@ -159,16 +159,19 @@ fn (mut p Parser) skip_comment(from int) !int {
 							return i
 						}
 					} else {
-						return p.fail(i, 'Expected "/" but encountered an end when parsing a multi-line comment')
+						return p.fail(i,
+							'Expected "/" but encountered an end when parsing a multi-line comment')
 					}
 				}
 			}
-			return p.fail(i, 'Expected "*/" but encountered an end when parsing a multi-line comment')
+			return p.fail(i,
+				'Expected "*/" but encountered an end when parsing a multi-line comment')
 		}
 		else {
 			return from
 		}
 	}
+
 	return i
 }
 
@@ -269,7 +272,8 @@ fn (mut p Parser) parse_object(from int) !(map[string]Any, int) {
 		i = p.skip_space(i, 'Expected value but encountered an end')!
 		a, next2 := p.parse_value(i)!
 		obj[key] = a
-		i = p.skip_space(next2, 'Expected "," or "}" but encountered an end when parsing an object')!
+		i =
+			p.skip_space(next2, 'Expected "," or "}" but encountered an end when parsing an object')!
 		c = p.str[i]
 		match c {
 			`}` {
@@ -304,7 +308,8 @@ fn (mut p Parser) parse_key(i int) !(string, int) {
 @[direct_array_access]
 fn (mut p Parser) skip_null(i int) !int {
 	if i + 3 >= p.str.len {
-		return p.fail(p.str.len, 'Expected "null" but encountered an end when parsing the primitive')
+		return p.fail(p.str.len,
+			'Expected "null" but encountered an end when parsing the primitive')
 	}
 	if p.str[i + 1] != `u` || p.str[i + 2] != `l` || p.str[i + 3] != `l` {
 		return p.fail(i, 'Expected "null" but encountered an end when parsing the primitive')
@@ -315,7 +320,8 @@ fn (mut p Parser) skip_null(i int) !int {
 @[direct_array_access]
 fn (mut p Parser) skip_false(i int) !int {
 	if i + 4 >= p.str.len {
-		return p.fail(p.str.len, 'Expected "false" but encountered an end when parsing the primitive')
+		return p.fail(p.str.len,
+			'Expected "false" but encountered an end when parsing the primitive')
 	}
 	if p.str[i + 1] != `a` || p.str[i + 2] != `l` || p.str[i + 3] != `s` || p.str[i + 4] != `e` {
 		return p.fail(i, 'Expected "false" but encountered an end when parsing the primitive')
@@ -326,7 +332,8 @@ fn (mut p Parser) skip_false(i int) !int {
 @[direct_array_access]
 fn (mut p Parser) skip_true(i int) !int {
 	if i + 3 >= p.str.len {
-		return p.fail(p.str.len, 'Expected "true" but encountered an end when parsing the primitive')
+		return p.fail(p.str.len,
+			'Expected "true" but encountered an end when parsing the primitive')
 	}
 	if p.str[i + 1] != `r` || p.str[i + 2] != `u` || p.str[i + 3] != `e` {
 		return p.fail(i, 'Expected "true" but encountered an end when parsing the primitive')
@@ -377,13 +384,16 @@ fn (mut p Parser) parse_string(from int, quote u8) !(string, int) {
 					if c < 32 {
 						idx := index_u8(escapable, c)
 						if idx >= 0 {
-							return p.fail(i, 'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
+							return p.fail(i,
+								'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
 						}
-						return p.fail(i, 'Unescaped control character "\\u${int(c).hex()}" encountered when parsing a string')
+						return p.fail(i,
+							'Unescaped control character "\\u${int(c).hex()}" encountered when parsing a string')
 					}
 					builder.write_u8(c)
 				}
 			}
+
 			i++
 			continue
 		}
@@ -410,10 +420,12 @@ fn (mut p Parser) parse_escape_sequence(mut builder Builder, from int) !int {
 		high, i = p.parse_unicode(i + 1)!
 		if 0xd800 <= high && high <= 0xdfff {
 			if (high & 0xfc00) != 0xd800 {
-				return p.fail(i, 'Expected unicode sequence "\\u...." for a high surrogate but encountered "\\u${high.hex()}" when parsing a string')
+				return p.fail(i,
+					'Expected unicode sequence "\\u...." for a high surrogate but encountered "\\u${high.hex()}" when parsing a string')
 			}
 			if i + 6 > p.str.len {
-				return p.fail(i, 'Expected unicode sequence "\\u...." for a low surrogate but encountered an end when parsing a string')
+				return p.fail(i,
+					'Expected unicode sequence "\\u...." for a low surrogate but encountered an end when parsing a string')
 			}
 			if p.str[i] != `\\` || p.str[i + 1] != `u` {
 				return p.fail(i, 'Expected unicode sequence "\\u...." for a low surrogate but encountered "${p.str[i..
@@ -422,9 +434,10 @@ fn (mut p Parser) parse_escape_sequence(mut builder Builder, from int) !int {
 			mut low := u16(0)
 			low, i = p.parse_unicode(i + 2)!
 			if (low & 0xfc00) != 0xdc00 {
-				return p.fail(i, 'Expected unicode sequence "\\u...." for a low surrogate but encountered "\\u${high.hex()}" when parsing a string')
+				return p.fail(i,
+					'Expected unicode sequence "\\u...." for a low surrogate but encountered "\\u${high.hex()}" when parsing a string')
 			}
-			utf32 := u32(high << 10) + low - 0x35fdc00
+			utf32 := (u32(high) << 10) + low - 0x35fdc00
 			builder.write_rune(utf32)
 		} else {
 			builder.write_rune(high)
@@ -454,9 +467,11 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 					if c < 32 {
 						idx := index_u8(escapable, c)
 						if idx >= 0 {
-							return p.fail(i, 'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
+							return p.fail(i,
+								'Unescaped whitespace "\\${rune(escaped[idx])}" encountered when parsing a string')
 						}
-						return p.fail(i, 'Unescaped control character "\\u${int(c).hex()}" encountered when parsing a string')
+						return p.fail(i,
+							'Unescaped control character "\\u${int(c).hex()}" encountered when parsing a string')
 					}
 				}
 			}
@@ -469,7 +484,8 @@ fn (mut p Parser) detect_escape(from int, quote u8) !(int, bool) {
 @[direct_array_access]
 fn (mut p Parser) parse_unicode(from int) !(u16, int) {
 	if from + 4 > p.str.len {
-		return p.fail(from, 'Expected unicode sequence "\\u...." but encountered an end when parsing a string')
+		return p.fail(from,
+			'Expected unicode sequence "\\u...." but encountered an end when parsing a string')
 	}
 	mut num := u16(0)
 	end := from + 4

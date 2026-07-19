@@ -39,7 +39,7 @@ fn marshal_any[T](mut builder Builder, val T, level int, opts &MarshalOpts) {
 	$if T is $enum {
 		marshal_enum(mut builder, val, opts)
 	} $else $if T is string {
-		write_string(mut builder, val, &StringifyOpts(opts), true)
+		write_string(mut builder, val, opts, true)
 	} $else $if T is $array {
 		marshal_array(mut builder, val, level, opts)
 	} $else $if T is $map {
@@ -131,7 +131,7 @@ fn marshal_map[T](mut builder Builder, object map[string]T, level int, opts &Mar
 		if level > 0 {
 			write_indent(mut builder, level)
 		}
-		write_string(mut builder, key, &StringifyOpts(opts), true)
+		write_string(mut builder, key, opts, true)
 		builder.write_u8(`:`)
 		if level > 0 {
 			builder.write_u8(` `)
@@ -156,7 +156,11 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 		mut skip := false
 		for attr in field.attrs {
 			if attr.starts_with('json: ') {
-				json_name = attr[6..]
+				json_name = if attr[6] == `'` {
+					attr[7..(attr.len - 1)]
+				} else {
+					attr[6..]
+				}
 			} else if attr == 'skip' {
 				skip = true
 			}
@@ -173,7 +177,7 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 				write_indent(mut builder, level)
 			}
 
-			write_string(mut builder, json_name, &StringifyOpts(opts), true)
+			write_string(mut builder, json_name, opts, true)
 			builder.write_u8(`:`)
 			if level > 0 {
 				builder.write_u8(` `)
@@ -200,7 +204,7 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 						write_raw(mut builder, null_str)
 					}
 				} $else {
-					write_string(mut builder, item, &StringifyOpts(opts), true)
+					write_string(mut builder, item, opts, true)
 				}
 			} $else $if field.is_array {
 				item := object.$(field.name)
