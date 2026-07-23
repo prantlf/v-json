@@ -1,5 +1,11 @@
 # Changes
 
+## [0.3.1](https://github.com/prantlf/v-json/compare/v0.3.0...v0.3.1) (2026-07-23)
+
+### Bug Fixes
+
+* Fix fields of the map type ([6dc3275](https://github.com/prantlf/v-json/commit/6dc3275da011d711f0879fe83feefaa5675a3fc3))
+
 ## [0.3.0](https://github.com/prantlf/v-json/compare/v0.2.6...v0.3.0) (2026-07-19)
 
 ### Features
