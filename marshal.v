@@ -218,7 +218,7 @@ fn marshal_struct[T](mut builder Builder, object &T, level int, opts &MarshalOpt
 					marshal_array(mut builder, item, newlevel, opts)
 				}
 			} $else $if field.is_map {
-				item := object.$(field.name)
+				item := &object.$(field.name)
 				$if field.is_option {
 					if val := item {
 						marshal_map(mut builder, val, newlevel, opts)
